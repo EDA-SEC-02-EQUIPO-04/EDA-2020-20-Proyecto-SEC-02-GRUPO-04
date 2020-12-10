@@ -15,7 +15,7 @@ Estructuras de Datos y Algoritmos de la Universidad de los Andes.
   - Correo: af.romerob1@uniandes.edu.co
   - Código: 202013448
   
- # Estructura del proyecto 
+ ## Estructura del proyecto 
 
 Este proyecto busca mostrar una posible forma de organizar el código que se va a desarrollar en los proyectos del curso.
 
