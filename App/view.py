@@ -43,11 +43,58 @@ operación seleccionada.
 #  Variables
 # ___________________________________________________
 
+taxisfile = 'taxi-trips-small.csv'
 
 # ___________________________________________________
 #  Menu principal
 # ___________________________________________________
 
+def printMenu():
+    print('\n')
+    print('------------------------------------------------')
+    print('1- Inicializar Analizador')
+    print('2- Cargar información taxis en Chicago')
+    print('3- Información ?')
+    print('4- Número de taxis en los servicios reportados')
+    print('5- Núnero total de compañias con un taxi inscrito')
+    print('6- Top compañias con taxis afiliados')
+    print('7- Top compañias por servicios prestados')
+    print('8- Taxis según fecha determinada')
+    print('9- Taxis con más puntos')
+    print('10- Mejor horario')
+    print('0- Salir')
+
+
+
 """
 Menu principal
 """
+while True:
+
+    printMenu()
+    inputs = input('Seleccione una opción para continuar \n')
+
+    if int(inputs[0]) == 1:
+        print('\nInicializando...')
+        cont = controller.init()
+    elif int(inputs[0]) == 2:
+        None
+    elif int(inputs[0]) == 3:
+        None
+    elif int(inputs[0]) == 4:
+        None
+    elif int(inputs[0]) == 5:
+        None
+    elif int(inputs[0]) == 6:
+        None
+    elif int(inputs[0]) == 7:
+        None
+    elif int(inputs[0]) == 8:
+        None
+    elif int(inputs[0]) == 9:
+        None
+    elif int(inputs[0]) == 10:
+        None
+    else:
+        sys.exit(0)
+sys.exit(0)
