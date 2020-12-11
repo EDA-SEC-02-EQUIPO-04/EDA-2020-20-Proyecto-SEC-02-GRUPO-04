@@ -78,11 +78,14 @@ def add_company(catalog, service):
     m.put(companies_per_services, company, services_number)
 
     if m.get(companies_per_taxis, company) != None:
-        taxis_number = me.getValue(m.get(companies_per_taxis, company))["taxis_number"]
+        asdfg = m.get(companies_per_taxis, company)
+        taxis_number = me.getValue(asdfg)["taxis_number"]
         taxis_lst = me.getValue(m.get(companies_per_taxis, company))["taxis_lst"]
         if lt.isPresent(taxis_lst, taxi) == 0:
             taxis_number += 1
             lt.addLast(taxis_lst, taxi)
+            value_dict = {"taxis_number": taxis_number, "taxis_lst": taxis_lst}
+            m.put(companies_per_taxis, company, value_dict)
     else:
         value_dict = {"taxis_number": 1, "taxis_lst": lt.newList(cmpfunction=compare_taxis)}
         m.put(companies_per_taxis, company, value_dict)
@@ -104,11 +107,11 @@ def companies_total(catalog):
 def top_companies_by_taxis(catalog, top_number):
     companies_per_taxis = catalog["companies"]["companies_per_taxis"]
     key_lst = m.keySet(companies_per_taxis)
-    iterator = it.newIterator(key_lst)
     greater = 0
     counter = 0
     lst = lt.newList(cmpfunction=compare_companies)
     while counter < top_number:
+        iterator = it.newIterator(key_lst)
         while it.hasNext(iterator):
             company = it.next(iterator)
             entry = m.get(companies_per_taxis, company)
@@ -119,17 +122,18 @@ def top_companies_by_taxis(catalog, top_number):
         lt.addLast(lst, (greater_company, greater))
         pos = lt.isPresent(key_lst, greater_company)
         lt.deleteElement(key_lst, pos)
+        greater = 0
         counter += 1
     return lst
 
 def top_companies_by_services(catalog, top_number):
     companies_per_services = catalog["companies"]["companies_per_services"]
     key_lst = m.keySet(companies_per_services)
-    iterator = it.newIterator(key_lst)
     greater = 0
     counter = 0
     lst = lt.newList(cmpfunction=compare_companies)
     while counter < top_number:
+        iterator = it.newIterator(key_lst)
         while it.hasNext(iterator):
             company = it.next(iterator)
             entry = m.get(companies_per_services, company)
@@ -140,6 +144,7 @@ def top_companies_by_services(catalog, top_number):
         lt.addLast(lst, (greater_company, greater))
         pos = lt.isPresent(key_lst, greater_company)
         lt.deleteElement(key_lst, pos)
+        greater = 0
         counter += 1
     return lst
         

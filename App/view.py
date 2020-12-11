@@ -81,18 +81,21 @@ def option_three():
     companies_total = controller.companies_total(cont)
     top_companies_by_taxis = controller.top_companies_by_taxis(cont, top_number_1)
     top_companies_by_services = controller.top_companies_by_services(cont, top_number_2)
-    print("Número total de taxis en los servicios reportados:",taxis_total)
+    print("\nNúmero total de taxis en los servicios reportados:",taxis_total)
     print("Número total de compañías que tienen al menos un taxi inscrito:",companies_total)
+    print("----------------------------------------------")
     print("Top",top_number_1,"de compañías por cantidad de taxis afiliados")
     iterator_1 = it.newIterator(top_companies_by_taxis)
     while it.hasNext(iterator_1):
         company = it.next(iterator_1)
         print(company[0],"| Taxis afiliados:",company[1])
+    print("----------------------------------------------")
     print("Top",top_number_2,"de compañías por cantidad de servicios prestados")
     iterator_2 = it.newIterator(top_companies_by_services)
     while it.hasNext(iterator_2):
         company = it.next(iterator_2)
-        print(company[0],"| Taxis afiliados:",company[1])
+        print(company[0],"| Servicios prestados:",company[1])
+    print("----------------------------------------------")
     
 
 """
