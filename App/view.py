@@ -43,7 +43,7 @@ operación seleccionada.
 #  Variables
 # ___________________________________________________
 
-taxisfile = 'taxi-trips-small.csv'
+taxisfile = 'taxi_trips_small.csv'
 
 # ___________________________________________________
 #  Menu principal
@@ -63,6 +63,8 @@ def printMenu():
     print('9- Taxis con más puntos')
     print('10- Mejor horario')
     print('0- Salir')
+    print('------------------------------------------------')
+
 
 """
 Menu principal
@@ -74,9 +76,9 @@ while True:
 
     if int(inputs[0]) == 1:
         print('\nInicializando...')
-        cont = controller.init()
+        cont = controller.init_analyzer()
     elif int(inputs[0]) == 2:
-        None
+        controller.load_data(cont, taxisfile)
     elif int(inputs[0]) == 3:
         None
     elif int(inputs[0]) == 4:

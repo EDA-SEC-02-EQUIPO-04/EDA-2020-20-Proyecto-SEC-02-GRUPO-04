@@ -63,16 +63,20 @@ def load_data(analyzer, taxis_file):
     t1_stop = process_time()
     print('Tiempo de ejecución ', t1_stop - t1_start, ' segundos')
 
-
 def load_taxis(analyzer, taxisfile):
-    dialect, dialect.delimeter = csv.excel, ';'
-    input_file = csv.DictReader(open(taxisfile, encoding='utf-8-sig'))
-    for taxi in input_file:
-        strip_dire = {}
-        for key, value in taxi.items():
-            strip_dire[key.strip()] = value.strip()
-        taxi = strip_dire
-        model.addtaxis(analyzer, taxi)
+    taxisfile = cf.data_dir + taxisfile
+    with open(taxisfile, encoding='utf-8') as input_file:
+        reader = csv.DictReader(input_file, delimiter=',')
+        for taxi in reader:
+            if taxi['taxi_id'] == 'NA' or taxi['taxi_id'] == None:
+                None
+            elif taxi['trip_total'] == 0 or taxi['trip_miles'] == 0:
+                None
+            elif taxi['trip_total'] == None or taxi['trip_miles'] == None:
+                None
+            else:
+                model.addtaxis(analyzer, taxi)
+    return analyzer
 # ___________________________________________________
 #  Funciones para consultas
 # ___________________________________________________

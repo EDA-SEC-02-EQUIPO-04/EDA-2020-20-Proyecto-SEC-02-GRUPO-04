@@ -46,18 +46,21 @@ de creacion y consulta sobre las estructuras de datos.
 
 def new_analyzer():
     analyzer = {'date_index': om.newMap(omaptype='RBT', comparefunction= compare_dates),
-                'taxis': m.newMap(60000,maptype='CHAINING', loadfactor=0.4, comparefunction=compare_ids)
+                'taxis': m.newMap(60000,maptype='CHAINING', loadfactor=0.5, comparefunction=compare_ids)
 
                }
     return analyzer 
 
 def new_taxi(taxi):
-    taxis = {'taxi_id':taxi,
-            'services':0,
+    taxis = {'taxi_id': taxi,
+            'services': 0,
             'money': 0,
-            'miles':0
-    }
+            'miles': 0,
+            'points': 0
+            } 
+
     return taxis
+
 # ==============================
 # Funciones de consulta
 # ==============================
@@ -70,14 +73,19 @@ def alpha_fuction(miles, money, services):
         money ([int]): Total dinero recibido 
         services ([int]): Servicios prestados 
     """
-    alpha = (miles/money)*services
-    return alpha
+    if services == 0:
+        None
+    else:
+        alpha = (miles/money)*services
+        return alpha
 
-def addtaxis(analyzer, taxi_id, information):
+def addtaxis(analyzer, information):
     """
     Agrega la información de cada taxi
     """
+
     taxis = analyzer['taxis']
+    taxi_id = int(information['taxi_id'], base= 16)
     existtaxi = m.contains(taxis, taxi_id)
     money = information['trip_total']
     miles = information['trip_miles']
@@ -88,12 +96,17 @@ def addtaxis(analyzer, taxi_id, information):
     else:
         taxiss = new_taxi(taxi_id)
         m.put(taxis, taxi_id, taxiss)
-    taxiss['serevices'] += 1
-    taxiss['money'] += money
-    taxiss['miles'] += miles 
+    taxiss['services'] += 1
+    taxiss['money'] += float(money)
+    taxiss['miles'] += float(miles)
+    print(taxiss['services'])
 
-
-
+    #Cálculo de puntos 
+    print('***'+ str(taxi_id))
+    puntos = alpha_fuction(taxiss['miles'], taxiss['money'], taxiss['services'])
+    taxiss['points'] = puntos
+    
+    print(taxiss)
 
 # ==============================
 # Funciones Helper
