@@ -73,7 +73,7 @@ def alpha_fuction(miles, money, services):
         money ([int]): Total dinero recibido 
         services ([int]): Servicios prestados 
     """
-    if services == 0:
+    if money == float(0):
         None
     else:
         alpha = (miles/money)*services
@@ -83,30 +83,26 @@ def addtaxis(analyzer, information):
     """
     Agrega la información de cada taxi
     """
-
     taxis = analyzer['taxis']
+    print(information['taxi_id'])
     taxi_id = int(information['taxi_id'], base= 16)
     existtaxi = m.contains(taxis, taxi_id)
-    money = information['trip_total']
-    miles = information['trip_miles']
-
+    
+    money = information['trip_total'].strip()
+    miles = information['trip_miles'].strip()
     if existtaxi:
         entry = m.get(taxis, taxi_id)
         taxiss = me.getValue(entry)
     else:
         taxiss = new_taxi(taxi_id)
         m.put(taxis, taxi_id, taxiss)
-    taxiss['services'] += 1
+    taxiss['services'] += 1    
     taxiss['money'] += float(money)
     taxiss['miles'] += float(miles)
-    print(taxiss['services'])
-
+    
     #Cálculo de puntos 
-    print('***'+ str(taxi_id))
     puntos = alpha_fuction(taxiss['miles'], taxiss['money'], taxiss['services'])
     taxiss['points'] = puntos
-    
-    print(taxiss)
 
 # ==============================
 # Funciones Helper

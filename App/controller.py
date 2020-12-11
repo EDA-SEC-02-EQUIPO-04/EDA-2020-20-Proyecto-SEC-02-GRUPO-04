@@ -68,11 +68,21 @@ def load_taxis(analyzer, taxisfile):
     with open(taxisfile, encoding='utf-8') as input_file:
         reader = csv.DictReader(input_file, delimiter=',')
         for taxi in reader:
-            if taxi['taxi_id'] == 'NA' or taxi['taxi_id'] == None:
+            if taxi['taxi_id'] == 'NA':
                 None
-            elif taxi['trip_total'] == 0 or taxi['trip_miles'] == 0:
+            elif taxi['taxi_id'] == None:
                 None
-            elif taxi['trip_total'] == None or taxi['trip_miles'] == None:
+            elif taxi['trip_total'] == 0:
+                None
+            elif taxi['trip_miles'] == 0:
+                None
+            elif taxi['trip_total'] == None:
+                None
+            elif taxi['trip_total'].strip() == "":
+                None
+            elif taxi['trip_miles'] == None:
+                None
+            elif taxi['trip_miles'].strip() == "":
                 None
             else:
                 model.addtaxis(analyzer, taxi)
