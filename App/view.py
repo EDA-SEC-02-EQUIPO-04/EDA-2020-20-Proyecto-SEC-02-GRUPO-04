@@ -31,6 +31,7 @@ from App import controller
 from DISClib.ADT import stack
 import timeit
 assert config
+import sys 
 
 """
 La vista se encarga de la interacción con el usuario.
@@ -43,7 +44,8 @@ operación seleccionada.
 #  Variables
 # ___________________________________________________
 
-taxisfile = 'taxi_trips_small.csv'
+taxisfile = 'taxi_trips_medium.csv'
+recursionlimit = sys.setrecursionlimit(16000)
 
 # ___________________________________________________
 #  Menu principal
@@ -56,7 +58,7 @@ def printMenu():
     print('2- Cargar información taxis en Chicago')
     print('3- Información ?')
     print('4- Número de taxis en los servicios reportados')
-    print('5- Núnero total de compañias con un taxi inscrito')
+    print('5- Número total de compañias con un taxi inscrito')
     print('6- Top compañias con taxis afiliados')
     print('7- Top compañias por servicios prestados')
     print('8- Taxis según fecha determinada')
@@ -65,6 +67,13 @@ def printMenu():
     print('0- Salir')
     print('------------------------------------------------')
 
+def option_four():
+    print('\nBuscando top taxis afiliados')
+    initialDate = input('Rango inicial (YYYY-MM-DD): ')
+    finalDate = input('Rango final (YYYY-MM-DD): ')
+    number_of_taxis = input('Número de taxis: ')
+    
+    return controller.getTaxisbyRange(cont, initialDate, finalDate, number_of_taxis)
 
 """
 Menu principal
@@ -79,10 +88,12 @@ while True:
         cont = controller.init_analyzer()
     elif int(inputs[0]) == 2:
         controller.load_data(cont, taxisfile)
+        print(controller.maxKey(cont))
+        print(controller.minKey(cont))
     elif int(inputs[0]) == 3:
         None
     elif int(inputs[0]) == 4:
-        None
+        option_four()
     elif int(inputs[0]) == 5:
         None
     elif int(inputs[0]) == 6:

@@ -28,7 +28,7 @@ import config as cf
 from App import model
 import csv
 from time import process_time
-
+import datetime
 """
 El controlador se encarga de mediar entre la vista y el modelo.
 Existen algunas operaciones en las que se necesita invocar
@@ -85,8 +85,26 @@ def load_taxis(analyzer, taxisfile):
             elif taxi['trip_miles'].strip() == "":
                 None
             else:
-                model.addtaxis(analyzer, taxi)
+                model.addTaxi(analyzer, taxi)
     return analyzer
+
+
 # ___________________________________________________
 #  Funciones para consultas
 # ___________________________________________________
+def getTaxisbyRange(analyzer, initialDate, finalDate, number_of_taxis):
+    """
+    Retorna los N taxis según los puntos obtenidos
+    """
+    
+    initialDate = datetime.datetime.strptime(initialDate, '%Y-%m-%d')
+    finalDate = datetime.datetime.strptime(finalDate, '%Y-%m-%d')
+    return model.getTaxisbyRange(analyzer, initialDate.date(), finalDate.date(), number_of_taxis)
+
+
+
+def maxKey(analyzer):
+    return model.maxKey(analyzer)
+
+def minKey(analyzer):
+    return model.minKey(analyzer)
