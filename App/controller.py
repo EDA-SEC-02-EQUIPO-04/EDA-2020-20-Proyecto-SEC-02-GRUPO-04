@@ -27,6 +27,7 @@
 import config as cf
 from App import model
 import csv
+from time import process_time
 
 """
 El controlador se encarga de mediar entre la vista y el modelo.
@@ -39,13 +40,39 @@ recae sobre el controlador.
 # ___________________________________________________
 #  Inicializacion del catalogo
 # ___________________________________________________
-
+def init_analyzer():
+    """
+    Llama a la función de inicialización del analizador
+    """
+    t1_start = process_time()
+    analyzer = model.new_analyzer()
+    t1_stop = process_time()
+    print('Tiempo de ejecución ', t1_stop - t1_start, ' segundos')
+    return analyzer
 
 # ___________________________________________________
 #  Funciones para la carga de datos y almacenamiento
 #  de datos en los modelos
 # ___________________________________________________
+def load_data(analyzer, taxis_file):
+    """
+    Carga los datos del archivo
+    """
+    t1_start = process_time()
+    load_taxis(analyzer, taxis_file)
+    t1_stop = process_time()
+    print('Tiempo de ejecución ', t1_stop - t1_start, ' segundos')
 
+
+def load_taxis(analyzer, taxisfile):
+    dialect, dialect.delimeter = csv.excel, ';'
+    input_file = csv.DictReader(open(taxisfile, encoding='utf-8-sig'))
+    for taxi in input_file:
+        strip_dire = {}
+        for key, value in taxi.items():
+            strip_dire[key.strip()] = value.strip()
+        taxi = strip_dire
+        model.addtaxis(analyzer, taxi)
 # ___________________________________________________
 #  Funciones para consultas
 # ___________________________________________________

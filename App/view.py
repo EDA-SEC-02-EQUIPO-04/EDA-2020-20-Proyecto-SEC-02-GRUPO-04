@@ -64,8 +64,6 @@ def printMenu():
     print('10- Mejor horario')
     print('0- Salir')
 
-
-
 """
 Menu principal
 """

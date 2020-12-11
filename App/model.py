@@ -26,7 +26,9 @@
 import config
 from DISClib.ADT.graph import gr
 from DISClib.ADT import map as m
+from DISClib.DataStructures import mapentry as me
 from DISClib.ADT import list as lt
+from DISClib.ADT import orderedmap as om
 from DISClib.DataStructures import listiterator as it
 from DISClib.Algorithms.Graphs import scc
 from DISClib.Algorithms.Graphs import dijsktra as djk
@@ -42,11 +44,56 @@ de creacion y consulta sobre las estructuras de datos.
 #                       API
 # -----------------------------------------------------
 
-# Funciones para agregar informacion al grafo
+def new_analyzer():
+    analyzer = {'date_index': om.newMap(omaptype='RBT', comparefunction= compare_dates),
+                'taxis': m.newMap(60000,maptype='CHAINING', loadfactor=0.4, comparefunction=compare_ids)
 
+               }
+    return analyzer 
+
+def new_taxi(taxi):
+    taxis = {'taxi_id':taxi,
+            'services':0,
+            'money': 0,
+            'miles':0
+    }
+    return taxis
 # ==============================
 # Funciones de consulta
 # ==============================
+
+def alpha_fuction(miles, money, services):
+    """Calculo función alfa de puntos
+
+    Args:
+        miles ([int]): Millas recorridas
+        money ([int]): Total dinero recibido 
+        services ([int]): Servicios prestados 
+    """
+    alpha = (miles/money)*services
+    return alpha
+
+def addtaxis(analyzer, taxi_id, information):
+    """
+    Agrega la información de cada taxi
+    """
+    taxis = analyzer['taxis']
+    existtaxi = m.contains(taxis, taxi_id)
+    money = information['trip_total']
+    miles = information['trip_miles']
+
+    if existtaxi:
+        entry = m.get(taxis, taxi_id)
+        taxiss = me.getValue(entry)
+    else:
+        taxiss = new_taxi(taxi_id)
+        m.put(taxis, taxi_id, taxiss)
+    taxiss['serevices'] += 1
+    taxiss['money'] += money
+    taxiss['miles'] += miles 
+
+
+
 
 # ==============================
 # Funciones Helper
@@ -55,3 +102,22 @@ de creacion y consulta sobre las estructuras de datos.
 # ==============================
 # Funciones de Comparacion
 # ==============================
+def compare_dates(date1, date2):
+    """
+    Compara dos fechas
+    """
+    if date1 == date2:
+        return 0
+    elif (date1 > date2):
+        return 1
+    else:
+        return -1
+
+def compare_ids(id_, tag):
+    entry = me.getKey(tag)
+    if int(id_) == int(entry):
+        return 0
+    elif int(id_) > int(entry):
+        return 1
+    else:
+        return 0
