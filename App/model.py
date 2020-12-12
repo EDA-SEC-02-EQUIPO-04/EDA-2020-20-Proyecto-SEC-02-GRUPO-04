@@ -48,8 +48,7 @@ de creacion y consulta sobre las estructuras de datos.
 def new_analyzer():
     analyzer = {'date_index': om.newMap(omaptype='RBT', comparefunction= compare_dates),
                 'taxis': lt.newList('SINGLE_LINKED', compare_ids),
-                'taxis_filter': lt.newList('SINGLE_LINKED')
-
+                'taxis_filter': m.newMap(60, maptype='CHAINING', comparefunction= compare_ids)
                }
     return analyzer 
 
@@ -74,8 +73,8 @@ def new_taxi(taxi):
              'money': 0,
              'miles': 0,
              'points': 0
-
-    }
+           }
+    return taxis
 
 # ==============================
 # Funciones de consulta
@@ -100,7 +99,7 @@ def addtaxis(analyzer, information):
     Agrega la información de cada taxi
     """
     taxis = analyzer['taxis_filter']
-    taxi_id = int(information['taxi_id'], base= 16)
+    taxi_id = information['taxi_id']
     existtaxi = m.contains(taxis, taxi_id)
     
     money = information['trip_total'].strip()
@@ -168,16 +167,34 @@ def updateDateIndex(map, taxi):
     return map
 
 
-def getTaxisbyRange(analyzer, initialDate, finalDate, number_of_taxis):
+def TaxisbyRange(analyzer, initialDate, finalDate, number_of_taxis): #Taxis de acuerdo a la fecha seleccionada
     lst = om.values(analyzer['date_index'], initialDate, finalDate)
-    lsts = om.keys(analyzer['date_index'], initialDate, finalDate)
     listiterator = it.newIterator(lst)
     while it.hasNext(listiterator):
         lstdate = it.next(listiterator)['lsttaxis']
         iterator_2 = it.newIterator(lstdate)
         while it.hasNext(iterator_2):
-            prueba = it.next(iterator_2)
-            print(prueba['trip_start_timestamp'])
+            taxis_id = it.next(iterator_2)['taxi_id']
+            money = it.next(iterator_2)['trip_total'].strip()
+            miles = it.next(iterator_2)['trip_miles'].strip()
+            existtaxi = m.contains(analyzer['taxis_filter'], taxis_id)
+            taxis = analyzer['taxis_filter']
+            if existtaxi:
+                entry = m.get(taxis, taxis_id)
+                taxiss = me.getValue(entry)
+            else:
+                taxiss = new_taxi(taxis_id)
+                m.put(taxis, taxis_id, taxiss)
+            taxiss['services'] += 1    
+            taxiss['money'] += float(money)
+            taxiss['miles'] += float(miles)
+
+            #Cálculo de puntos 
+            puntos = alpha_fuction(taxiss['miles'], taxiss['money'], taxiss['services'])
+            taxiss['points'] = puntos
+
+def getTaxisbyRange(analyzer, number_of_taxis, )
+
 
 def maxKey(analyzer):
     """
@@ -210,9 +227,9 @@ def compare_dates(date1, date2):
 
 def compare_ids(id_, tag):
     entry = me.getKey(tag)
-    if int(id_) == int(entry):
+    if id_ == entry:
         return 0
-    elif int(id_) > int(entry):
+    elif id_ > entry:
         return 1
     else:
         return 0

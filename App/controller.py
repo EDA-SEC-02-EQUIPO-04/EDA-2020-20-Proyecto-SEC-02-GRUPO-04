@@ -99,7 +99,7 @@ def getTaxisbyRange(analyzer, initialDate, finalDate, number_of_taxis):
     
     initialDate = datetime.datetime.strptime(initialDate, '%Y-%m-%d')
     finalDate = datetime.datetime.strptime(finalDate, '%Y-%m-%d')
-    return model.getTaxisbyRange(analyzer, initialDate.date(), finalDate.date(), number_of_taxis)
+    return model.TaxisbyRange(analyzer, initialDate.date(), finalDate.date(), number_of_taxis)
 
 
 
