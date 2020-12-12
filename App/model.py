@@ -33,6 +33,7 @@ from DISClib.DataStructures import listiterator as it
 from DISClib.Algorithms.Graphs import scc
 from DISClib.Algorithms.Graphs import dijsktra as djk
 from DISClib.Utils import error as error
+from DISClib.ADT import minpq as min
 import datetime
 assert config
 
@@ -94,7 +95,7 @@ def alpha_fuction(miles, money, services):
         alpha = (miles/money)*services
         return alpha
 
-def addtaxis(analyzer, information):
+def addtaxis(analyzer, information): #No se utiliza
     """
     Agrega la información de cada taxi
     """
@@ -167,7 +168,7 @@ def updateDateIndex(map, taxi):
     return map
 
 
-def TaxisbyRange(analyzer, initialDate, finalDate, number_of_taxis): #Taxis de acuerdo a la fecha seleccionada
+def TaxisbyRange(analyzer, initialDate, finalDate): #Taxis de acuerdo a la fecha seleccionada
     lst = om.values(analyzer['date_index'], initialDate, finalDate)
     listiterator = it.newIterator(lst)
     while it.hasNext(listiterator):
@@ -192,8 +193,18 @@ def TaxisbyRange(analyzer, initialDate, finalDate, number_of_taxis): #Taxis de a
             #Cálculo de puntos 
             puntos = alpha_fuction(taxiss['miles'], taxiss['money'], taxiss['services'])
             taxiss['points'] = puntos
+    
+def getTaxisbyRange(analyzer, number_of_taxis):
+    lst = m.keySet(analyzer['taxis_filter'])
+    iterator = it.newIterator(lst)
+    minPQ = min.newMinPQ(compare_points)
+    while it.hasNext(iterator):
+        taxis = it.next(iterator)
+        points = m.get(analyzer['taxis_filter'], taxis)['value']['points']
+        
+        print(min.insert(minPQ, points))
+    
 
-def getTaxisbyRange(analyzer, number_of_taxis, )
 
 
 def maxKey(analyzer):
@@ -233,3 +244,14 @@ def compare_ids(id_, tag):
         return 1
     else:
         return 0
+
+def compare_points(points_1, points_2):
+    """
+    Compara dos fechas
+    """
+    if points_1 == points_2:
+        return 0
+    elif (points_1 > points_2):
+        return 1
+    else:
+        return -1
