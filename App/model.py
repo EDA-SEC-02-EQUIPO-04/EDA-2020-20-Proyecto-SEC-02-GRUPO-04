@@ -50,8 +50,7 @@ def new_catalog():
                "taxis": {"taxi_lst": lt.newList(cmpfunction=compare_taxis)},
                "companies": {"companies_lst": lt.newList(cmpfunction=compare_companies), "companies_per_services": m.newMap(comparefunction=compare_companies), "companies_per_taxis": m.newMap(comparefunction=compare_companies)},
                'date_index': om.newMap(omaptype='RBT', comparefunction= compare_dates),
-               'taxis_filter': m.newMap(60, maptype='CHAINING', comparefunction= compare_ids),
-               'taxis_with_filter': lt.newList('SINGLE_LINKED', compare_ids)
+               'taxis_filter': m.newMap(60, maptype='PROBING', comparefunction= compare_ids),
                }
     return catalog
 
@@ -283,7 +282,7 @@ def TaxisbyRange(catalog, initialDate, finalDate): #Taxis de acuerdo a la fecha 
             m.remove(catalog['taxis_filter'], taxis)     
 
     if len(lista_taxis) == 0:
-        print('No se regustran taxis, vuelva a intentarlo')
+        print('No se registran taxis, vuelva a intentarlo')
         mayor = None
     else:
         while len(lista_taxis)-1 != 0:        
@@ -301,6 +300,16 @@ def TaxisbyRange(catalog, initialDate, finalDate): #Taxis de acuerdo a la fecha 
 def getTaxisbyRange(list, number_of_taxis):
     if list == None:
         None
+    elif number_of_taxis >= len(list):
+        for i in range(0, len(list)):
+            print('\n' + str(i+1) + '\n------------------------------------------------------------')
+            print('\033[1m' + 'Taxi id: ' + '\033[0m' + list[i]['taxi'])
+            print('\033[1m' + 'Taxi services: ' + '\033[0m' + str(list[i]['services']))
+            print('\033[1m' +'Taxi money: ' + '\033[0m' + str(list[i]['money']))
+            print('\033[1m' +'Taxi miles: ' + '\033[0m' + str(list[i]['miles']))
+            print('\033[1m' +'Taxi points: '+ '\033[0m' + str(list[i]['points']))
+            print('------------------------------------------------------------')
+            print ('\033[0m')
     else:
         for i in range(0, number_of_taxis):
             print('\n' + str(i+1) + '\n------------------------------------------------------------')
