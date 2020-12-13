@@ -129,6 +129,19 @@ def option_five():
         return controller.getTaxisbyRange(lista, number_of_taxis)
 
 
+def option_six():
+    print('\nServicio de consulta del mejor horario para desplazarse entre dos "Community Area"')
+    origin_area, destination_area = input('Ingrese area de origen: '), input('Ingrese area de destino: ')
+    initial_date, final_date = input('Rango inicial (YYYY-MM-DD): '), input('Rango final (YYYY-MM-DD): ')
+    start_time, route, estimated_time = controller.best_schedule(cont, origin_area,
+                                                                 destination_area, initial_date, final_date)
+    print(f'\nSe recomienda iniciar el viaje a la hora {start_time}.\n')
+    print('La secuencia de "community areas" recomendadas a seguir es la siguiente:')
+    for pos, area in enumerate(route):
+        print(f'{pos}. Community Area #{area}')
+    print(f'Estimando un tiempo de duracion de {estimated_time} segundos de viaje.')
+
+
 """
 Menu principal
 """
@@ -146,6 +159,7 @@ while True:
         option_four()
     elif int(inputs[0]) == 5:
         option_five()
+    elif int(inputs[0]) == 6:
+        option_six()
     else:
         sys.exit(0)
-sys.exit(0)

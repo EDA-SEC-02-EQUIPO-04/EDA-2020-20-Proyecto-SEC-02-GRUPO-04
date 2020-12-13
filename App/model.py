@@ -297,7 +297,7 @@ def TaxisbyRange(catalog, initialDate, finalDate):  # Taxis de acuerdo a la fech
             m.remove(catalog['taxis_filter'], taxis)
 
     if len(lista_taxis) == 0:
-        print('No se regustran taxis, vuelva a intentarlo')
+        print('No se registran taxis, vuelva a intentarlo')
         mayor = None
     else:
         while len(lista_taxis) - 1 != 0:
@@ -326,6 +326,82 @@ def getTaxisbyRange(list, number_of_taxis):
             print('\033[1m' + 'Taxi points: ' + '\033[0m' + str(list[i]['points']))
             print('------------------------------------------------------------')
             print('\033[0m')
+
+
+def best_schedule(catalog, origin_area, destination_area, initial_date, final_date):
+    route = []
+    estimated = 0
+    found_d = False
+    found_p = False
+    lst = om.values(catalog['date_index'], initial_date, final_date)
+    listiterator = it.newIterator(lst)
+    while it.hasNext(listiterator):
+        lstdate = it.next(listiterator)['lsttaxis']
+        iterator_2 = it.newIterator(lstdate)
+        while it.hasNext(iterator_2):
+            taxi = it.next(iterator_2)
+            if taxi['pickup_community_area'] == '':
+                if taxi['dropoff_community_area'] == '':
+                    continue
+                if float(taxi['dropoff_community_area']) == float(destination_area):
+                    dropoff_taxi = taxi
+                    found_d = True
+                    continue
+            else:
+                if float(taxi['pickup_community_area']) == float(origin_area):
+                    pickup_taxi = taxi
+                    found_p = True
+                    continue
+            if taxi['dropoff_community_area'] == '':
+                continue
+            if float(taxi['dropoff_community_area']) == float(destination_area):
+                dropoff_taxi = taxi
+                found_d = True
+                continue
+    if not found_d and not found_p:
+        return '00:00', ['No hay rutas a esas áreas en el horario seleccionado.'], '0'
+    route.append(pickup_taxi['pickup_community_area'])
+    start_time = pickup_taxi['trip_start_timestamp']
+    estimated += float(pickup_taxi['trip_seconds'])
+    listiterator = it.newIterator(lst)
+    while it.hasNext(listiterator):
+        lstdate = it.next(listiterator)['lsttaxis']
+        iterator_2 = it.newIterator(lstdate)
+        while it.hasNext(iterator_2):
+            path = 'Ruta incompleta, dado que no hay camino'
+            taxi = it.next(iterator_2)
+            if pickup_taxi['pickup_community_area'] == taxi['pickup_community_area']:
+                path, time_travel = compare_routes(taxi, lst, dropoff_taxi)
+            if path != 'Ruta incompleta, dado que no hay camino':
+                for area in path:
+                    route.append(area)
+                estimated += time_travel
+                route.append(dropoff_taxi['dropoff_community_area'])
+                estimated += float(dropoff_taxi['trip_seconds'])
+                return start_time, route, estimated
+    route.append(path)
+    estimated += time_travel
+    route.append(dropoff_taxi['dropoff_community_area'])
+    estimated += float(dropoff_taxi['trip_seconds'])
+    return start_time, route, estimated
+
+
+def compare_routes(taxi, lst, dropoff_taxi):
+    path = []
+    time_travel = 0
+    listiterator = it.newIterator(lst)
+    while it.hasNext(listiterator):
+        lstdate = it.next(listiterator)['lsttaxis']
+        iterator_2 = it.newIterator(lstdate)
+        while it.hasNext(iterator_2):
+            taxi_compare = it.next(iterator_2)
+            if taxi['dropoff_community_area'] == taxi_compare['pickup_community_area']:
+                taxi = taxi_compare
+                time_travel += float(taxi['trip_seconds'])
+                path.append(taxi['pickup_community_area'])
+                if taxi['dropoff_community_area'] == dropoff_taxi['dropoff_community_area']:
+                    return path, time_travel
+    return 'Ruta incompleta, dado que no hay camino', 0
 
 
 def index_height(catalog):

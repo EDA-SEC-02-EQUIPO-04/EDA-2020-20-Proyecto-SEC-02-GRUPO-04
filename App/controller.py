@@ -75,19 +75,19 @@ def load_taxis(catalog, taxisfile):
         reader = csv.DictReader(input_file, delimiter=',')
         for taxi in reader:
             if taxi['taxi_id'] == 'NA':
-                None
-            if taxi['taxi_id'] == None:
-                None
-            if taxi['trip_total'] == float(0):
-                None
-            if taxi['trip_miles'] == float(0):
-                None
-            if taxi['trip_total'] == None or taxi['trip_miles'] == None:
-                None
-            if taxi['trip_total'] == "":
-                None
-            if taxi['trip_miles'] == "":
-                None
+                continue
+            elif taxi['taxi_id'] is None:
+                continue
+            elif taxi['trip_total'] == float(0):
+                continue
+            elif taxi['trip_miles'] == float(0):
+                continue
+            elif taxi['trip_total'] is None or taxi['trip_miles'] is None:
+                continue
+            elif taxi['trip_total'] == "":
+                continue
+            elif taxi['trip_miles'] == "":
+                continue
             else:
                 model.addTaxi(catalog, taxi)
     return catalog
@@ -152,3 +152,9 @@ def top_companies_by_taxis(catalog, top_number):
 
 def top_companies_by_services(catalog, top_number):
     return model.top_companies_by_services(catalog, top_number)
+
+
+def best_schedule(catalog, origin_area, destination_area, initial_date, final_date):
+    initial_date = datetime.datetime.strptime(initial_date, '%Y-%m-%d')
+    final_date = datetime.datetime.strptime(final_date, '%Y-%m-%d')
+    return model.best_schedule(catalog, origin_area, destination_area, initial_date.date(), final_date.date())
