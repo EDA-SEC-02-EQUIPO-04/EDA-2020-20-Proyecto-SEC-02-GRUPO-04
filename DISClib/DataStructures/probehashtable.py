@@ -31,6 +31,7 @@ import config
 from DISClib.DataStructures import mapentry as me
 from DISClib.DataStructures import liststructure as lt
 from DISClib.Utils import error as error
+
 assert config
 
 """
@@ -62,8 +63,8 @@ def newMap(numelements, prime, loadfactor, comparefunction):
         Exception
     """
     try:
-        capacity = nextPrime(numelements//loadfactor)
-        scale = rd.randint(1, prime-1) + 1
+        capacity = nextPrime(numelements // loadfactor)
+        scale = rd.randint(1, prime - 1) + 1
         shift = rd.randint(1, prime)
         table = lt.newList('ARRAY_LIST', comparefunction)
         for _ in range(capacity):
@@ -98,11 +99,11 @@ def put(map, key, value):
         Exception
     """
     try:
-        hash = hashValue(map, key)      # Se obtiene el hascode de la llave
+        hash = hashValue(map, key)  # Se obtiene el hascode de la llave
         entry = me.newMapEntry(key, value)
         pos = findSlot(map, key, hash, map['comparefunction'])
         lt.changeInfo(map['table'], abs(pos), entry)
-        if (pos < 0):           # Se reemplaza el valor con el nuevo valor
+        if (pos < 0):  # Se reemplaza el valor con el nuevo valor
             map['size'] += 1
             map['currentfactor'] = map['size'] / map['capacity']
 
@@ -210,7 +211,7 @@ def isEmpty(map):
     try:
         empty = True
         for pos in range(lt.size(map['table'])):
-            entry = lt.getElement(map['table'], pos+1)
+            entry = lt.getElement(map['table'], pos + 1)
             if (entry['key'] is not None and entry['key'] != '__EMPTY__'):
                 empty = False
                 break
@@ -233,7 +234,7 @@ def keySet(map):
     try:
         ltset = lt.newList()
         for pos in range(lt.size(map['table'])):
-            entry = lt.getElement(map['table'], pos+1)
+            entry = lt.getElement(map['table'], pos + 1)
             if (entry['key'] is not None and entry['key'] != '__EMPTY__'):
                 lt.addLast(ltset, entry['key'])
         return ltset
@@ -255,7 +256,7 @@ def valueSet(map):
     try:
         ltset = lt.newList()
         for pos in range(lt.size(map['table'])):
-            entry = lt.getElement(map['table'], pos+1)
+            entry = lt.getElement(map['table'], pos + 1)
             if (entry['value'] is not None and entry['value'] != '__EMPTY__'):
                 lt.addLast(ltset, entry['value'])
         return ltset
@@ -283,7 +284,7 @@ def hashValue(table, key):
         b = table['shift']
         p = table['prime']
         m = table['capacity']
-        value = int((abs(h*a + b) % p) % m + 1)
+        value = int((abs(h * a + b) % p) % m + 1)
         return value
     except Exception as exp:
         error.reraise(exp, 'Probe:hashvalue')
@@ -298,7 +299,7 @@ def findSlot(map, key, hashvalue, comparefunction):
     comparefunction: funcion de comparación para la búsqueda de la llave
     """
     try:
-        avail = -1          # no se ha encontrado una posición aun
+        avail = -1  # no se ha encontrado una posición aun
         searchpos = 0
         table = map['table']
         while (searchpos != hashvalue):  # Se busca una posición
@@ -307,15 +308,15 @@ def findSlot(map, key, hashvalue, comparefunction):
             if isAvailable(table, searchpos):  # La posición esta disponible
                 element = lt.getElement(table, searchpos)
                 if (avail == -1):
-                    avail = searchpos            # primera posición disponible
-                if element['key'] is None:       # nunca ha sido utilizada
+                    avail = searchpos  # primera posición disponible
+                if element['key'] is None:  # nunca ha sido utilizada
                     break
-            else:                    # la posicion no estaba disponible
+            else:  # la posicion no estaba disponible
                 element = lt.getElement(table, searchpos)
                 if comparefunction(key, element) == 0:  # Es la llave
-                    return searchpos               # Se  retorna la posicion
-            searchpos = (((searchpos) % map['capacity'])+1)
-        return -(avail)    # numero negativo indica que el elemento no estaba
+                    return searchpos  # Se  retorna la posicion
+            searchpos = (((searchpos) % map['capacity']) + 1)
+        return -(avail)  # numero negativo indica que el elemento no estaba
     except Exception as exp:
         error.reraise(exp, 'Probe:findslot')
 
@@ -343,7 +344,7 @@ def rehash(map):
     """
     try:
         newtable = lt.newList('ARRAY_LIST', map['comparefunction'])
-        capacity = nextPrime(map['capacity']*2)
+        capacity = nextPrime(map['capacity'] * 2)
         for _ in range(capacity):
             entry = me.newMapEntry(None, None)
             lt.addLast(newtable, entry)
@@ -353,7 +354,7 @@ def rehash(map):
         map['table'] = newtable
         map['capacity'] = capacity
         for pos in range(lt.size(oldtable)):
-            entry = lt.getElement(oldtable, pos+1)
+            entry = lt.getElement(oldtable, pos + 1)
             if (entry['key'] is not None and entry['key'] != '__EMPTY__'):
                 hash = hashValue(map, entry['key'])
                 pos = findSlot(map, entry['key'], hash, map['comparefunction'])
@@ -373,16 +374,16 @@ def rehash(map):
 
 def isPrime(n):
     # Corner cases
-    if(n <= 1):
+    if (n <= 1):
         return False
-    if(n <= 3):
+    if (n <= 3):
         return True
 
-    if(n % 2 == 0 or n % 3 == 0):
+    if (n % 2 == 0 or n % 3 == 0):
         return False
 
     for i in range(5, int(math.sqrt(n) + 1), 6):
-        if(n % i == 0 or n % (i + 2) == 0):
+        if (n % i == 0 or n % (i + 2) == 0):
             return False
 
     return True
@@ -399,8 +400,8 @@ def nextPrime(N):
     found = False
     # Loop continuously until isPrime returns
     # True for a number greater than n
-    while(not found):
+    while (not found):
         prime = prime + 1
-        if(isPrime(prime) is True):
+        if (isPrime(prime) is True):
             found = True
     return int(prime)

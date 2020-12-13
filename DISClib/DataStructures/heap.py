@@ -27,6 +27,7 @@
 import config
 from DISClib.DataStructures import liststructure as lt
 from DISClib.Utils import error as error
+
 assert config
 
 """
@@ -187,11 +188,11 @@ def swim(heap, pos):
     """
     try:
         while (pos > 1):
-            parent = lt.getElement(heap['elements'], int((pos/2)))
+            parent = lt.getElement(heap['elements'], int((pos / 2)))
             element = lt.getElement(heap['elements'], int(pos))
             if greater(heap, parent, element):
-                exchange(heap, pos, int(pos/2))
-            pos = pos//2
+                exchange(heap, pos, int(pos / 2))
+            pos = pos // 2
     except Exception as exp:
         error.reraise(exp, 'heap:swim')
 
@@ -211,11 +212,11 @@ def sink(heap, pos):
     """
     try:
         size = heap['size']
-        while ((2*pos <= size)):
-            j = 2*pos
+        while ((2 * pos <= size)):
+            j = 2 * pos
             if (j < size):
                 if greater(heap, lt.getElement(heap['elements'], j),
-                           lt.getElement(heap['elements'], (j+1))):
+                           lt.getElement(heap['elements'], (j + 1))):
                     j += 1
             if (not greater(heap, lt.getElement(heap['elements'], pos),
                             lt.getElement(heap['elements'], j))):

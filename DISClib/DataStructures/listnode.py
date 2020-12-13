@@ -35,7 +35,7 @@ def newSingleNode(element):
     Estructura que contiene la información a guardar en una lista encadenada
     """
     node = {'info': element, 'next': None}
-    return(node)
+    return (node)
 
 
 def getElement(node):

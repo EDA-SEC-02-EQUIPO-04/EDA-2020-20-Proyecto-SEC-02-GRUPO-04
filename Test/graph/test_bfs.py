@@ -4,6 +4,7 @@ from DISClib.DataStructures import edge as e
 from DISClib.ADT import graph as g
 from DISClib.ADT import stack as stk
 from DISClib.Algorithms.Graphs import bfs
+
 assert config
 
 
@@ -56,6 +57,7 @@ def test_dfs(graph):
     assert bfs.hasPathTo(search, 'Manizales') is True
     path = bfs.pathTo(search, 'Manizales')
     assert stk.size(path) == 4
+
 
 # --------------------------------------
 #       Funciones de Comparacion

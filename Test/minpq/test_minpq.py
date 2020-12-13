@@ -1,6 +1,7 @@
 import pytest
 import config
 from DISClib.ADT import minpq as pq
+
 assert config
 
 

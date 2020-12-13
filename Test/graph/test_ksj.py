@@ -2,6 +2,7 @@ import pytest
 import config
 from DISClib.ADT import graph as g
 from DISClib.Algorithms.Graphs import scc
+
 assert config
 
 

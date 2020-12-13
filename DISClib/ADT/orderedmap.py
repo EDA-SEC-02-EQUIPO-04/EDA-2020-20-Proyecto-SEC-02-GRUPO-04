@@ -25,9 +25,9 @@
  *
  """
 
-
 import config
 from DISClib.DataStructures import orderedmapstructure as om
+
 assert config
 
 

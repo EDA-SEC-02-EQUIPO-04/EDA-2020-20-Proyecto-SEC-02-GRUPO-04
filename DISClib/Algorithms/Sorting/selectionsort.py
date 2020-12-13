@@ -27,6 +27,7 @@
 
 import config as cf
 from DISClib.ADT import list as lt
+
 assert cf
 
 """
@@ -40,11 +41,11 @@ def selectionSort(lst, lessfunction):
     size = lt.size(lst)
     pos1 = 1
     while pos1 < size:
-        minimum = pos1    # minimun tiene el menor elemento
+        minimum = pos1  # minimun tiene el menor elemento
         pos2 = pos1 + 1
         while (pos2 <= size):
             if (lessfunction(lt.getElement(lst, pos2),
-               (lt.getElement(lst, minimum)))):
+                             (lt.getElement(lst, minimum)))):
                 minimum = pos2  # minimum = posición elemento más pequeño
             pos2 += 1
         lt.exchange(lst, pos1, minimum)  # elemento más pequeño -> elem pos1

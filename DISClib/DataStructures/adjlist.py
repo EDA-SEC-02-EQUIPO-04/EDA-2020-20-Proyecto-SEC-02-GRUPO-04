@@ -24,13 +24,13 @@
  *
  """
 
-
 import config
 from DISClib.ADT import map as map
 from DISClib.DataStructures import liststructure as lt
 from DISClib.DataStructures import listiterator as it
 from DISClib.DataStructures import edge as e
 from DISClib.Utils import error as error
+
 assert config
 
 """
@@ -283,12 +283,12 @@ def getEdge(graph, vertexa, vertexb):
             edge = it.next(itvertex)
             if (graph['directed']):
                 if (e.either(edge) == vertexa and
-                   (e.other(edge, e.either(edge)) == vertexb)):
+                        (e.other(edge, e.either(edge)) == vertexb)):
                     return edge
-            elif(e.either(edge) == vertexa or
-                 (e.other(edge, e.either(edge)) == vertexa)):
+            elif (e.either(edge) == vertexa or
+                  (e.other(edge, e.either(edge)) == vertexa)):
                 if (e.either(edge) == vertexb or
-                   (e.other(edge, e.either(edge)) == vertexb)):
+                        (e.other(edge, e.either(edge)) == vertexb)):
                     return edge
         return None
     except Exception as exp:
@@ -344,7 +344,7 @@ def addEdge(graph, vertexa, vertexb, weight=0):
             lt.addLast(entryb['value'], edge)
         else:
             degree = map.get(graph['indegree'], vertexb)
-            map.put(graph['indegree'], vertexb, degree['value']+1)
+            map.put(graph['indegree'], vertexb, degree['value'] + 1)
         graph['edges'] += 1
         return graph
     except Exception as exp:

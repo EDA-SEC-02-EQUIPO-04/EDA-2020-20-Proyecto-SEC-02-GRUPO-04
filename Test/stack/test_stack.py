@@ -23,6 +23,7 @@ import pytest
 import config
 from DISClib.DataStructures import listiterator as it
 from DISClib.ADT import stack as st
+
 assert config
 
 list_type = 'ARRAY_LIST'
@@ -155,7 +156,7 @@ def test_top_pop():
     total = st.size(stack)
     while not (st.isEmpty(stack)):
         top = st.top(stack)
-        assert(st.pop(stack) == top)
+        assert (st.pop(stack) == top)
         total -= 1
         assert (total == st.size(stack))
 
@@ -172,34 +173,34 @@ def test_push_pop():
     assert (st.isEmpty(stack))
 
     st.push(stack, book5)
-    assert(st.size(stack) == 1)
-    assert(st.top(stack) == st.pop(stack))
-    assert(st.size(stack) == 0)
+    assert (st.size(stack) == 1)
+    assert (st.top(stack) == st.pop(stack))
+    assert (st.size(stack) == 0)
 
     st.push(stack, book6)
-    assert(st.size(stack) == 1)
-    assert(st.top(stack) == st.pop(stack))
-    assert(st.size(stack) == 0)
+    assert (st.size(stack) == 1)
+    assert (st.top(stack) == st.pop(stack))
+    assert (st.size(stack) == 0)
 
     st.push(stack, book3)
-    assert(st.size(stack) == 1)
-    assert(st.top(stack) == st.pop(stack))
-    assert(st.size(stack) == 0)
+    assert (st.size(stack) == 1)
+    assert (st.top(stack) == st.pop(stack))
+    assert (st.size(stack) == 0)
 
     st.push(stack, book10)
-    assert(st.size(stack) == 1)
-    assert(st.top(stack) == st.pop(stack))
-    assert(st.size(stack) == 0)
+    assert (st.size(stack) == 1)
+    assert (st.top(stack) == st.pop(stack))
+    assert (st.size(stack) == 0)
 
     st.push(stack, book1)
-    assert(st.size(stack) == 1)
-    assert(st.top(stack) == st.pop(stack))
-    assert(st.size(stack) == 0)
+    assert (st.size(stack) == 1)
+    assert (st.top(stack) == st.pop(stack))
+    assert (st.size(stack) == 0)
 
     st.push(stack, book2)
-    assert(st.size(stack) == 1)
-    assert(st.top(stack) == st.pop(stack))
-    assert(st.size(stack) == 0)
+    assert (st.size(stack) == 1)
+    assert (st.top(stack) == st.pop(stack))
+    assert (st.size(stack) == 0)
 
     st.push(stack, book8)
     st.push(stack, book4)
@@ -222,7 +223,7 @@ def test_error_pop():
     """
     stack = st.newStack(list_type)
     assert (st.size(stack) == 0)
-    assert(st.isEmpty(stack))
+    assert (st.isEmpty(stack))
 
     with pytest.raises(Exception):
         st.pop(stack)

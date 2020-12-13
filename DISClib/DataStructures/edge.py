@@ -23,6 +23,7 @@
  """
 
 import config
+
 assert config
 
 """

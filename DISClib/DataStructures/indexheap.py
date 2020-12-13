@@ -50,9 +50,9 @@ def newIndexHeap(cmpfunction):
         indexheap['elements'] = lt.newList(datastructure='ARRAY_LIST',
                                            cmpfunction=cmpfunction)
         indexheap['qpMap'] = map.newMap(
-                                        maptype='PROBING',
-                                        comparefunction=cmpfunction
-                                        )
+            maptype='PROBING',
+            comparefunction=cmpfunction
+        )
         return indexheap
     except Exception as exp:
         error.reraise(exp, 'indexheap:newindexheap')
@@ -144,7 +144,7 @@ def min(iheap):
         Exception
     """
     try:
-        if(iheap['size'] > 0):
+        if (iheap['size'] > 0):
             minIdx = lt.getElement(iheap['elements'], 1)
             return minIdx['key']
         return None
@@ -272,13 +272,13 @@ def swim(iheap, pos):
     """
     try:
         while (pos > 1):
-            posparent = int((pos/2))
+            posparent = int((pos / 2))
             poselement = int(pos)
             parent = lt.getElement(iheap['elements'], posparent)
             element = lt.getElement(iheap['elements'], poselement)
             if greater(iheap, parent, element):
                 exchange(iheap, posparent, poselement)
-            pos = (pos//2)
+            pos = (pos // 2)
     except Exception as exp:
         error.reraise(exp, 'indexheap:swim')
 
@@ -298,11 +298,11 @@ def sink(iheap, pos):
     """
     try:
         size = iheap['size']
-        while ((2*pos <= size)):
-            j = 2*pos
+        while ((2 * pos <= size)):
+            j = 2 * pos
             if (j < size):
                 if greater(iheap, lt.getElement(iheap['elements'], j),
-                           lt.getElement(iheap['elements'], (j+1))):
+                           lt.getElement(iheap['elements'], (j + 1))):
                     j += 1
             if (not greater(iheap, lt.getElement(iheap['elements'], pos),
                             lt.getElement(iheap['elements'], j))):

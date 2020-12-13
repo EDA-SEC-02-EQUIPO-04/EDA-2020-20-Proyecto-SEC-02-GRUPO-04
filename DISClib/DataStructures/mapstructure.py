@@ -25,10 +25,10 @@
  *
  """
 
-
 import config
 from DISClib.DataStructures import chaininghashtable as cht
 from DISClib.DataStructures import probehashtable as pht
+
 assert config
 
 """

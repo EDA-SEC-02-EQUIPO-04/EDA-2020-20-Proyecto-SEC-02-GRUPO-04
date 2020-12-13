@@ -24,7 +24,6 @@
  *
  """
 
-
 import config
 from DISClib.DataStructures import edge as e
 from DISClib.DataStructures import listiterator as it
@@ -34,6 +33,7 @@ from DISClib.ADT import graph as g
 from DISClib.ADT import stack
 from DISClib.Utils import error as error
 import math
+
 assert config
 
 
@@ -187,10 +187,10 @@ def initSearch(graph, source):
     """
     try:
         search = {
-               'source': source,
-               'visited': None,
-               'iminpq': None
-             }
+            'source': source,
+            'visited': None,
+            'iminpq': None
+        }
 
         search['visited'] = map.newMap(numelements=g.numVertices(graph),
                                        maptype='PROBING',
@@ -209,8 +209,8 @@ def initSearch(graph, source):
                 {'marked': True, 'edgeTo': None, 'distTo': 0}
                 )
         pq = iminpq.newIndexMinPQ(
-                                  cmpfunction=graph['comparefunction']
-                                  )
+            cmpfunction=graph['comparefunction']
+        )
         search['iminpq'] = pq
         iminpq.insert(search['iminpq'], source, 0)
         return search

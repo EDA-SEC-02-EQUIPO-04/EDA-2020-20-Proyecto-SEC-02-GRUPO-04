@@ -2,6 +2,7 @@ import pytest
 import config
 from DISClib.DataStructures import bst as bst
 from DISClib.ADT import list as lt
+
 assert config
 
 

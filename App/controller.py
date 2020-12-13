@@ -29,6 +29,7 @@ from App import model
 import csv
 from time import process_time
 import datetime
+
 """
 El controlador se encarga de mediar entre la vista y el modelo.
 Existen algunas operaciones en las que se necesita invocar
@@ -36,6 +37,7 @@ el modelo varias veces o integrar varias de las respuestas
 del modelo en una sola respuesta.  Esta responsabilidad
 recae sobre el controlador.
 """
+
 
 # ___________________________________________________
 #  Inicializacion del catalogo
@@ -51,6 +53,7 @@ def init_catalog():
 
     return catalog
 
+
 # ___________________________________________________
 #  Funciones para la carga de datos y almacenamiento
 #  de datos en los modelos
@@ -64,6 +67,7 @@ def load_data(catalog, taxis_file):
     load_taxis(catalog, taxis_file)
     t1_stop = process_time()
     print('Tiempo de ejecución ', t1_stop - t1_start, ' segundos')
+
 
 def load_taxis(catalog, taxisfile):
     taxisfile = cf.data_dir + taxisfile
@@ -88,6 +92,7 @@ def load_taxis(catalog, taxisfile):
                 model.addTaxi(catalog, taxi)
     return catalog
 
+
 # ___________________________________________________
 #  Funciones para consultas
 # ___________________________________________________
@@ -97,41 +102,53 @@ def getTaxis(catalog, initialDate, finalDate):
     lista = model.TaxisbyRange(catalog, initialDate.date(), finalDate.date())
     return lista
 
+
 def getTaxisbyRange(lista, number_of_taxis):
     """
     Retorna los N taxis según los puntos obtenidos
-    """    
+    """
     return model.getTaxisbyRange(lista, number_of_taxis)
+
 
 def index_height(catalog):
     return model.index_height(catalog)
 
+
 def index_size(catalog):
     return model.index_size(catalog)
+
 
 def maxKey(catalog):
     return model.maxKey(catalog)
 
+
 def minKey(catalog):
     return model.minKey(catalog)
+
+
 def loadFile(catalog, service_file):
     service_file = cf.data_dir + service_file
-    input_file = csv.DictReader(open(service_file, encoding= 'utf-8'), delimiter = ',')
+    input_file = csv.DictReader(open(service_file, encoding='utf-8'), delimiter=',')
     for service in input_file:
         model.add_taxi(catalog, service)
         model.add_company(catalog, service)
     return catalog
+
+
 # ___________________________________________________
 #  Funciones para consultas
 # ___________________________________________________
 def taxis_total(catalog):
     return model.taxis_total(catalog)
 
+
 def companies_total(catalog):
     return model.companies_total(catalog)
 
+
 def top_companies_by_taxis(catalog, top_number):
     return model.top_companies_by_taxis(catalog, top_number)
+
 
 def top_companies_by_services(catalog, top_number):
     return model.top_companies_by_services(catalog, top_number)
