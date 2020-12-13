@@ -46,13 +46,12 @@ de creacion y consulta sobre las estructuras de datos.
 #                       API
 # -----------------------------------------------------
 
-def new_analyzer():
-    analyzer = {'date_index': om.newMap(omaptype='RBT', comparefunction= compare_dates),
-                'taxis': lt.newList('SINGLE_LINKED', compare_ids),
+def new_catalog():
+    catalog = {'date_index': om.newMap(omaptype='RBT', comparefunction= compare_dates),
                 'taxis_filter': m.newMap(60, maptype='CHAINING', comparefunction= compare_ids),
                 'taxis_with_filter': lt.newList('SINGLE_LINKED', compare_ids)
                }
-    return analyzer 
+    return catalog 
 
 def newTaxiEntry(taxi):
     taxis = {'serviceIndex': m.newMap(numelements=60,
@@ -96,10 +95,9 @@ def alpha_fuction(miles, money, services):
         alpha = (miles/money)*services
         return alpha
 
-def addTaxi(analyzer, taxi):
-    lt.addLast(analyzer['taxis'], taxi)
-    updateDateIndex(analyzer['date_index'], taxi)
-    return analyzer
+def addTaxi(catalog, taxi):
+    updateDateIndex(catalog['date_index'], taxi)
+    return catalog
 
 
 def addDateIndex(datentry, information):
@@ -142,8 +140,8 @@ def updateDateIndex(map, taxi):
     addDateIndex(datentry, taxi) 
     return map
 
-def TaxisbyRange(analyzer, initialDate, finalDate): #Taxis de acuerdo a la fecha seleccionada
-    lst = om.values(analyzer['date_index'], initialDate, finalDate)
+def TaxisbyRange(catalog, initialDate, finalDate): #Taxis de acuerdo a la fecha seleccionada
+    lst = om.values(catalog['date_index'], initialDate, finalDate)
     listiterator = it.newIterator(lst)
     while it.hasNext(listiterator):
         lstdate = it.next(listiterator)['lsttaxis']
@@ -153,8 +151,8 @@ def TaxisbyRange(analyzer, initialDate, finalDate): #Taxis de acuerdo a la fecha
             money = it.next(iterator_2)['trip_total']
             miles = it.next(iterator_2)['trip_miles']
             if money != "" and miles != "" and taxis_id != "" and taxis_id != 'NA':
-                existtaxi = m.contains(analyzer['taxis_filter'], taxis_id)
-                taxis = analyzer['taxis_filter']
+                existtaxi = m.contains(catalog['taxis_filter'], taxis_id)
+                taxis = catalog['taxis_filter']
                 if existtaxi:
                     entry = m.get(taxis, taxis_id)
                     taxiss = me.getValue(entry)                   
@@ -173,17 +171,17 @@ def TaxisbyRange(analyzer, initialDate, finalDate): #Taxis de acuerdo a la fecha
             else: 
                 None
 
-    lst = m.keySet(analyzer['taxis_filter'])    
+    lst = m.keySet(catalog['taxis_filter'])    
     iterator = it.newIterator(lst)
     lista_taxis = []
     mayor = []
 
     while it.hasNext(iterator):
         taxis = it.next(iterator)        
-        points = m.get(analyzer['taxis_filter'], taxis)['value'] 
+        points = m.get(catalog['taxis_filter'], taxis)['value'] 
         if points['miles'] != 0.0 and points['money'] != 0.0 :                
             lista_taxis.append(points)
-            m.remove(analyzer['taxis_filter'], taxis)     
+            m.remove(catalog['taxis_filter'], taxis)     
 
     if len(lista_taxis) == 0:
         print('No se regustran taxis, vuelva a intentarlo')
@@ -215,29 +213,29 @@ def getTaxisbyRange(list, number_of_taxis):
             print('------------------------------------------------------------')
             print ('\033[0m')
 
-def index_height(analyzer):
+def index_height(catalog):
     """
     Altura del arbol
     """
-    return om.height(analyzer['date_index'])
+    return om.height(catalog['date_index'])
 
-def index_size(analyzer):
+def index_size(catalog):
     """
     Número de elementos 
     """
-    return om.size(analyzer['date_index'])
+    return om.size(catalog['date_index'])
 
-def maxKey(analyzer):
+def maxKey(catalog):
     """
     Llave más grande 
     """
-    return om.maxKey(analyzer['date_index'])
+    return om.maxKey(catalog['date_index'])
 
-def minKey(analyzer):
+def minKey(catalog):
     """
     Llave más pequeña
     """
-    return om.minKey(analyzer['date_index'])
+    return om.minKey(catalog['date_index'])
 # ==============================
 # Funciones Helper
 # ==============================

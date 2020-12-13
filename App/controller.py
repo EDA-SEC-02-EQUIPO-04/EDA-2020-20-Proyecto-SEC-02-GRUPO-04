@@ -40,30 +40,30 @@ recae sobre el controlador.
 # ___________________________________________________
 #  Inicializacion del catalogo
 # ___________________________________________________
-def init_analyzer():
+def init_catalog():
     """
     Llama a la función de inicialización del analizador
     """
     t1_start = process_time()
-    analyzer = model.new_analyzer()
+    catalog = model.new_catalog()
     t1_stop = process_time()
     print('Tiempo de ejecución ', t1_stop - t1_start, ' segundos')
-    return analyzer
+    return catalog
 
 # ___________________________________________________
 #  Funciones para la carga de datos y almacenamiento
 #  de datos en los modelos
 # ___________________________________________________
-def load_data(analyzer, taxis_file):
+def load_data(catalog, taxis_file):
     """
     Carga los datos del archivo
     """
     t1_start = process_time()
-    load_taxis(analyzer, taxis_file)
+    load_taxis(catalog, taxis_file)
     t1_stop = process_time()
     print('Tiempo de ejecución ', t1_stop - t1_start, ' segundos')
 
-def load_taxis(analyzer, taxisfile):
+def load_taxis(catalog, taxisfile):
     taxisfile = cf.data_dir + taxisfile
     with open(taxisfile, encoding='utf-8') as input_file:
         reader = csv.DictReader(input_file, delimiter=',')
@@ -83,17 +83,17 @@ def load_taxis(analyzer, taxisfile):
             if taxi['trip_miles'] == "":
                 None
             else:
-                model.addTaxi(analyzer, taxi)
-    return analyzer
+                model.addTaxi(catalog, taxi)
+    return catalog
 
 
 # ___________________________________________________
 #  Funciones para consultas
 # ___________________________________________________
-def getTaxis(analyzer, initialDate, finalDate):
+def getTaxis(catalog, initialDate, finalDate):
     initialDate = datetime.datetime.strptime(initialDate, '%Y-%m-%d')
     finalDate = datetime.datetime.strptime(finalDate, '%Y-%m-%d')
-    lista = model.TaxisbyRange(analyzer, initialDate.date(), finalDate.date())
+    lista = model.TaxisbyRange(catalog, initialDate.date(), finalDate.date())
     return lista
 
 def getTaxisbyRange(lista, number_of_taxis):
@@ -102,14 +102,14 @@ def getTaxisbyRange(lista, number_of_taxis):
     """    
     return model.getTaxisbyRange(lista, number_of_taxis)
 
-def index_height(analyzer):
-    return model.index_height(analyzer)
+def index_height(catalog):
+    return model.index_height(catalog)
 
-def index_size(analyzer):
-    return model.index_size(analyzer)
+def index_size(catalog):
+    return model.index_size(catalog)
 
-def maxKey(analyzer):
-    return model.maxKey(analyzer)
+def maxKey(catalog):
+    return model.maxKey(catalog)
 
-def minKey(analyzer):
-    return model.minKey(analyzer)
+def minKey(catalog):
+    return model.minKey(catalog)

@@ -93,7 +93,7 @@ while True:
 
     if int(inputs[0]) == 1:
         print('\nInicializando...')
-        cont = controller.init_analyzer()
+        cont = controller.init_catalog()
     elif int(inputs[0]) == 2:
         controller.load_data(cont, taxisfile)
         print('Altura del arbol: ' + str(controller.index_height(cont)))
