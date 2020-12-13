@@ -32,6 +32,7 @@ from DISClib.ADT import stack
 from DISClib.DataStructures import listiterator as it
 import timeit
 assert config
+import sys 
 
 """
 La vista se encarga de la interacción con el usuario.
@@ -44,9 +45,11 @@ operación seleccionada.
 #  Variables
 # ___________________________________________________
 
+
 small_file = "taxi-trips-wrvz-psew-subset-small.csv"
 medium_file = "taxi-trips-wrvz-psew-subset-medium.csv"
 large_file = "taxi-trips-wrvz-psew-subset-large.csv"
+recursionlimit = sys.setrecursionlimit(16000)
 
 # ___________________________________________________
 #  Menu principal
@@ -57,8 +60,9 @@ def print_menu():
     print('1- Inicializar Catálogo')
     print('2- Cargar información de taxis')
     print('3- Reporte general')
-    print('4- ...')
-    print('5- ...')
+    print('4- Taxis según fecha determinada')
+    print('5- Taxis con más puntos')
+    print('6- Mejor horario')
     print('0- Salir')
     print('-----------------------------------------------')
 
@@ -73,6 +77,11 @@ def option_two():
     else:
         print("Dato inválido")
     controller.loadFile(cont, file)
+    controller.load_data(cont, file)
+    print('Altura del arbol: ' + str(controller.index_height(cont)))
+    print('Elementos en el arbol: ' + str(controller.index_size(cont)))
+    print('Mayor llave: ' + str(controller.maxKey(cont)))
+    print('Menor llave: ' + str(controller.minKey(cont)))
     
 def option_three():
     top_number_1 = int(input("Ingrese el rango para el top de compañías ordenadas por cantidad de taxis afiliados: "))
@@ -97,27 +106,40 @@ def option_three():
         print(company[0],"| Servicios prestados:",company[1])
     print("----------------------------------------------")
     
+def option_four():
+    print('\nBuscando taxis con mejor puntaje en un rango de fechas')
+    initialDate = input('Rango inicial (YYYY-MM-DD): ').strip()
+    finalDate = input('Rango final (YYYY-MM-DD): ').strip()
+    lista = controller.getTaxis(cont, initialDate, finalDate)
+    if lista != None:
+        number_of_taxis = int(input('Número de taxis: '))
+        return controller.getTaxisbyRange(lista, number_of_taxis)
+
+def option_five():
+    print('\nBuscando taxis con mejor puntaje en una fecha')
+    initialDate = input('Rango inicial (YYYY-MM-DD): ').strip()
+    lista = controller.getTaxis(cont, initialDate, initialDate)
+    if lista != None:
+        number_of_taxis = int(input('Número de taxis: '))
+        return controller.getTaxisbyRange(lista, number_of_taxis)
 
 """
 Menu principal
 """
 while True:
-
     print_menu()
     inputs = input('Seleccione una opción para continuar \n')
-
     if int(inputs[0]) == 1:
         print('\nInicializando...')
         cont = controller.init_catalog()
     elif int(inputs[0]) == 2:
-        option_two()
+        option_two()        
     elif int(inputs[0]) == 3:
-        option_three()
+      option_three()
     elif int(inputs[0]) == 4:
-        option_four()
+      option_four()
     elif int(inputs[0]) == 5:
-        execution_time = timeit.timeit(option_five, number=1)
-        print("Tiempo de ejecución: " + str(execution_time))
+      option_five() 
     else:
         sys.exit(0)
 sys.exit(0)

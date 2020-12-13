@@ -27,7 +27,8 @@
 import config as cf
 from App import model
 import csv
-
+from time import process_time
+import datetime
 """
 El controlador se encarga de mediar entre la vista y el modelo.
 Existen algunas operaciones en las que se necesita invocar
@@ -40,13 +41,78 @@ recae sobre el controlador.
 #  Inicializacion del catalogo
 # ___________________________________________________
 def init_catalog():
+    Llama a la función de inicialización del analizador
+    """
+    t1_start = process_time()
     catalog = model.new_catalog()
+    t1_stop = process_time()
+    print('Tiempo de ejecución ', t1_stop - t1_start, ' segundos')
+
     return catalog
 
 # ___________________________________________________
 #  Funciones para la carga de datos y almacenamiento
 #  de datos en los modelos
 # ___________________________________________________
+
+def load_data(catalog, taxis_file):
+    """
+    Carga los datos del archivo
+    """
+    t1_start = process_time()
+    load_taxis(catalog, taxis_file)
+    t1_stop = process_time()
+    print('Tiempo de ejecución ', t1_stop - t1_start, ' segundos')
+
+def load_taxis(catalog, taxisfile):
+    taxisfile = cf.data_dir + taxisfile
+    with open(taxisfile, encoding='utf-8') as input_file:
+        reader = csv.DictReader(input_file, delimiter=',')
+        for taxi in reader:
+            if taxi['taxi_id'] == 'NA':
+                None
+            if taxi['taxi_id'] == None:
+                None
+            if taxi['trip_total'] == float(0):
+                None
+            if taxi['trip_miles'] == float(0):
+                None
+            if taxi['trip_total'] == None or taxi['trip_miles'] == None:
+                None
+            if taxi['trip_total'] == "":
+                None
+            if taxi['trip_miles'] == "":
+                None
+            else:
+                model.addTaxi(catalog, taxi)
+    return catalog
+
+# ___________________________________________________
+#  Funciones para consultas
+# ___________________________________________________
+def getTaxis(catalog, initialDate, finalDate):
+    initialDate = datetime.datetime.strptime(initialDate, '%Y-%m-%d')
+    finalDate = datetime.datetime.strptime(finalDate, '%Y-%m-%d')
+    lista = model.TaxisbyRange(catalog, initialDate.date(), finalDate.date())
+    return lista
+
+def getTaxisbyRange(lista, number_of_taxis):
+    """
+    Retorna los N taxis según los puntos obtenidos
+    """    
+    return model.getTaxisbyRange(lista, number_of_taxis)
+
+def index_height(catalog):
+    return model.index_height(catalog)
+
+def index_size(catalog):
+    return model.index_size(catalog)
+
+def maxKey(catalog):
+    return model.maxKey(catalog)
+
+def minKey(catalog):
+    return model.minKey(catalog)
 def loadFile(catalog, service_file):
     service_file = cf.data_dir + service_file
     input_file = csv.DictReader(open(service_file, encoding= 'utf-8'), delimiter = ',')
