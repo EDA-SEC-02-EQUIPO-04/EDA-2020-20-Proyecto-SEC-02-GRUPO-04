@@ -70,19 +70,17 @@ def load_taxis(analyzer, taxisfile):
         for taxi in reader:
             if taxi['taxi_id'] == 'NA':
                 None
-            elif taxi['taxi_id'] == None:
+            if taxi['taxi_id'] == None:
                 None
-            elif taxi['trip_total'] == 0:
+            if taxi['trip_total'] == float(0):
                 None
-            elif taxi['trip_miles'] == 0:
+            if taxi['trip_miles'] == float(0):
                 None
-            elif taxi['trip_total'] == None:
+            if taxi['trip_total'] == None or taxi['trip_miles'] == None:
                 None
-            elif taxi['trip_total'].strip() == "":
+            if taxi['trip_total'] == "":
                 None
-            elif taxi['trip_miles'] == None:
-                None
-            elif taxi['trip_miles'].strip() == "":
+            if taxi['trip_miles'] == "":
                 None
             else:
                 model.addTaxi(analyzer, taxi)
@@ -92,17 +90,23 @@ def load_taxis(analyzer, taxisfile):
 # ___________________________________________________
 #  Funciones para consultas
 # ___________________________________________________
-def getTaxisbyRange(analyzer, initialDate, finalDate, number_of_taxis):
-    """
-    Retorna los N taxis según los puntos obtenidos
-    """
-    
+def getTaxis(analyzer, initialDate, finalDate):
     initialDate = datetime.datetime.strptime(initialDate, '%Y-%m-%d')
     finalDate = datetime.datetime.strptime(finalDate, '%Y-%m-%d')
-    model.TaxisbyRange(analyzer, initialDate.date(), finalDate.date())
-    return model.getTaxisbyRange(analyzer, number_of_taxis)
+    lista = model.TaxisbyRange(analyzer, initialDate.date(), finalDate.date())
+    return lista
 
+def getTaxisbyRange(lista, number_of_taxis):
+    """
+    Retorna los N taxis según los puntos obtenidos
+    """    
+    return model.getTaxisbyRange(lista, number_of_taxis)
 
+def index_height(analyzer):
+    return model.index_height(analyzer)
+
+def index_size(analyzer):
+    return model.index_size(analyzer)
 
 def maxKey(analyzer):
     return model.maxKey(analyzer)

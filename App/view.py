@@ -53,7 +53,7 @@ recursionlimit = sys.setrecursionlimit(16000)
 
 def printMenu():
     print('\n')
-    print('------------------------------------------------')
+    print('--------------------------------------------------')
     print('1- Inicializar Analizador')
     print('2- Cargar información taxis en Chicago')
     print('3- Información ?')
@@ -65,21 +65,29 @@ def printMenu():
     print('9- Taxis con más puntos')
     print('10- Mejor horario')
     print('0- Salir')
-    print('------------------------------------------------')
+    print('--------------------------------------------------')
 
 def option_four():
-    print('\nBuscando top taxis afiliados')
-    initialDate = input('Rango inicial (YYYY-MM-DD): ')
-    finalDate = input('Rango final (YYYY-MM-DD): ')
-    number_of_taxis = input('Número de taxis: ')
-    
-    return controller.getTaxisbyRange(cont, initialDate, finalDate, number_of_taxis)
+    print('\nBuscando taxis con mejor puntaje en un rango de fechas')
+    initialDate = input('Rango inicial (YYYY-MM-DD): ').strip()
+    finalDate = input('Rango final (YYYY-MM-DD): ').strip()
+    lista = controller.getTaxis(cont, initialDate, finalDate)
+    if lista != None:
+        number_of_taxis = int(input('Número de taxis: '))
+        return controller.getTaxisbyRange(lista, number_of_taxis)
+
+def option_five():
+    print('\nBuscando taxis con mejor puntaje en una fecha')
+    initialDate = input('Rango inicial (YYYY-MM-DD): ').strip()
+    lista = controller.getTaxis(cont, initialDate, initialDate)
+    if lista != None:
+        number_of_taxis = int(input('Número de taxis: '))
+        return controller.getTaxisbyRange(lista, number_of_taxis)
 
 """
 Menu principal
 """
 while True:
-
     printMenu()
     inputs = input('Seleccione una opción para continuar \n')
 
@@ -88,14 +96,16 @@ while True:
         cont = controller.init_analyzer()
     elif int(inputs[0]) == 2:
         controller.load_data(cont, taxisfile)
-        print(controller.maxKey(cont))
-        print(controller.minKey(cont))
+        print('Altura del arbol: ' + str(controller.index_height(cont)))
+        print('Elementos en el arbol: ' + str(controller.index_size(cont)))
+        print('Mayor llave: ' + str(controller.maxKey(cont)))
+        print('Menor llave: ' + str(controller.minKey(cont)))        
     elif int(inputs[0]) == 3:
         None
     elif int(inputs[0]) == 4:
         option_four()
     elif int(inputs[0]) == 5:
-        None
+        option_five()
     elif int(inputs[0]) == 6:
         None
     elif int(inputs[0]) == 7:

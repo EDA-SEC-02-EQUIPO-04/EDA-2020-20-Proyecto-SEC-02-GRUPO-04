@@ -49,7 +49,8 @@ de creacion y consulta sobre las estructuras de datos.
 def new_analyzer():
     analyzer = {'date_index': om.newMap(omaptype='RBT', comparefunction= compare_dates),
                 'taxis': lt.newList('SINGLE_LINKED', compare_ids),
-                'taxis_filter': m.newMap(60, maptype='CHAINING', comparefunction= compare_ids)
+                'taxis_filter': m.newMap(60, maptype='CHAINING', comparefunction= compare_ids),
+                'taxis_with_filter': lt.newList('SINGLE_LINKED', compare_ids)
                }
     return analyzer 
 
@@ -95,32 +96,6 @@ def alpha_fuction(miles, money, services):
         alpha = (miles/money)*services
         return alpha
 
-def addtaxis(analyzer, information): #No se utiliza
-    """
-    Agrega la información de cada taxi
-    """
-    taxis = analyzer['taxis_filter']
-    taxi_id = information['taxi_id']
-    existtaxi = m.contains(taxis, taxi_id)
-    
-    money = information['trip_total'].strip()
-    miles = information['trip_miles'].strip()
-    if existtaxi:
-        entry = m.get(taxis, taxi_id)
-        taxiss = me.getValue(entry)
-    else:
-        taxiss = new_taxi(taxi_id)
-        m.put(taxis, taxi_id, taxiss)
-    taxiss['services'] += 1    
-    taxiss['money'] += float(money)
-    taxiss['miles'] += float(miles)
-    
-    
-    #Cálculo de puntos 
-    puntos = alpha_fuction(taxiss['miles'], taxiss['money'], taxiss['services'])
-    taxiss['points'] = puntos
-    print(taxis)
-
 def addTaxi(analyzer, taxi):
     lt.addLast(analyzer['taxis'], taxi)
     updateDateIndex(analyzer['date_index'], taxi)
@@ -134,7 +109,7 @@ def addDateIndex(datentry, information):
     lst = datentry['lsttaxis']
     lt.addLast(lst, information)
     serviceIndex = datentry['serviceIndex']
-    taxi_id = int(information['taxi_id'], base= 16)
+    taxi_id = information['taxi_id']
     servicentry = m.get(serviceIndex, taxi_id)
     
     if servicentry is None:
@@ -167,7 +142,6 @@ def updateDateIndex(map, taxi):
     addDateIndex(datentry, taxi) 
     return map
 
-
 def TaxisbyRange(analyzer, initialDate, finalDate): #Taxis de acuerdo a la fecha seleccionada
     lst = om.values(analyzer['date_index'], initialDate, finalDate)
     listiterator = it.newIterator(lst)
@@ -176,36 +150,82 @@ def TaxisbyRange(analyzer, initialDate, finalDate): #Taxis de acuerdo a la fecha
         iterator_2 = it.newIterator(lstdate)
         while it.hasNext(iterator_2):
             taxis_id = it.next(iterator_2)['taxi_id']
-            money = it.next(iterator_2)['trip_total'].strip()
-            miles = it.next(iterator_2)['trip_miles'].strip()
-            existtaxi = m.contains(analyzer['taxis_filter'], taxis_id)
-            taxis = analyzer['taxis_filter']
-            if existtaxi:
-                entry = m.get(taxis, taxis_id)
-                taxiss = me.getValue(entry)
-            else:
-                taxiss = new_taxi(taxis_id)
-                m.put(taxis, taxis_id, taxiss)
-            taxiss['services'] += 1    
-            taxiss['money'] += float(money)
-            taxiss['miles'] += float(miles)
+            money = it.next(iterator_2)['trip_total']
+            miles = it.next(iterator_2)['trip_miles']
+            if money != "" and miles != "" and taxis_id != "" and taxis_id != 'NA':
+                existtaxi = m.contains(analyzer['taxis_filter'], taxis_id)
+                taxis = analyzer['taxis_filter']
+                if existtaxi:
+                    entry = m.get(taxis, taxis_id)
+                    taxiss = me.getValue(entry)                   
+                else:
+                    taxiss = new_taxi(taxis_id)
+                    m.put(taxis, taxis_id, taxiss)
 
-            #Cálculo de puntos 
-            puntos = alpha_fuction(taxiss['miles'], taxiss['money'], taxiss['services'])
-            taxiss['points'] = puntos
-    
-def getTaxisbyRange(analyzer, number_of_taxis):
-    lst = m.keySet(analyzer['taxis_filter'])
+                taxiss['services'] += 1    
+                taxiss['money'] += float(money)
+                taxiss['miles'] += float(miles)
+
+                #Cálculo de puntos 
+
+                puntos = alpha_fuction(taxiss['miles'], taxiss['money'], taxiss['services'])
+                taxiss['points'] = puntos
+            else: 
+                None
+
+    lst = m.keySet(analyzer['taxis_filter'])    
     iterator = it.newIterator(lst)
-    minPQ = min.newMinPQ(compare_points)
+    lista_taxis = []
+    mayor = []
+
     while it.hasNext(iterator):
-        taxis = it.next(iterator)
-        points = m.get(analyzer['taxis_filter'], taxis)['value']['points']
-        
-        print(min.insert(minPQ, points))
-    
+        taxis = it.next(iterator)        
+        points = m.get(analyzer['taxis_filter'], taxis)['value'] 
+        if points['miles'] != 0.0 and points['money'] != 0.0 :                
+            lista_taxis.append(points)
+            m.remove(analyzer['taxis_filter'], taxis)     
 
+    if len(lista_taxis) == 0:
+        print('No se regustran taxis, vuelva a intentarlo')
+        mayor = None
+    else:
+        while len(lista_taxis)-1 != 0:        
+            for i in range(len(lista_taxis)-1): 
+                if lista_taxis[i]['points'] >= lista_taxis[i+1]['points']:
+                    aux = lista_taxis[i]
+                    lista_taxis[i] = lista_taxis[i+1]
+                    lista_taxis[i+1] = aux
+                
+            mayor_taxi = lista_taxis.pop(len(lista_taxis)-1)
+            mayor.append(mayor_taxi)
+        print('\nSe tienen ' + str(len(mayor)) + ' taxis, seleccione un número menor o igual\n' )
+    return mayor
 
+def getTaxisbyRange(list, number_of_taxis):
+    if list == None:
+        None
+    else:
+        for i in range(0, number_of_taxis):
+            print('\n' + str(i+1) + '\n------------------------------------------------------------')
+            print('\033[1m' + 'Taxi id: ' + '\033[0m' + list[i]['taxi'])
+            print('\033[1m' + 'Taxi services: ' + '\033[0m' + str(list[i]['services']))
+            print('\033[1m' +'Taxi money: ' + '\033[0m' + str(list[i]['money']))
+            print('\033[1m' +'Taxi miles: ' + '\033[0m' + str(list[i]['miles']))
+            print('\033[1m' +'Taxi points: '+ '\033[0m' + str(list[i]['points']))
+            print('------------------------------------------------------------')
+            print ('\033[0m')
+
+def index_height(analyzer):
+    """
+    Altura del arbol
+    """
+    return om.height(analyzer['date_index'])
+
+def index_size(analyzer):
+    """
+    Número de elementos 
+    """
+    return om.size(analyzer['date_index'])
 
 def maxKey(analyzer):
     """
