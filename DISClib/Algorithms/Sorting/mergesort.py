@@ -27,6 +27,7 @@
 
 import config as cf
 from DISClib.ADT import list as lt
+
 assert cf
 
 """
@@ -43,7 +44,7 @@ def mergesort(lst, lessfunction):
         """se divide la lista original, en dos partes, izquierda y derecha,
         desde el punto mid."""
         leftlist = lt.subList(lst, 1, mid)
-        rightlist = lt.subList(lst, mid+1, size - mid)
+        rightlist = lt.subList(lst, mid + 1, size - mid)
 
         """se hace el llamado recursivo con la lista izquierda y derecha"""
         mergesort(leftlist, lessfunction)
@@ -59,10 +60,10 @@ def mergesort(lst, lessfunction):
             elemi = lt.getElement(leftlist, i)
             elemj = lt.getElement(rightlist, j)
             """compara y ordena los elementos"""
-            if lessfunction(elemj, elemi):   # caso estricto elemj < elemi
+            if lessfunction(elemj, elemi):  # caso estricto elemj < elemi
                 lt.changeInfo(lst, k, elemj)
                 j += 1
-            else:                            # caso elemi <= elemj
+            else:  # caso elemi <= elemj
                 lt.changeInfo(lst, k, elemi)
                 i += 1
             k += 1

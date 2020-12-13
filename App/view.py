@@ -24,15 +24,15 @@
  *
  """
 
-
 import sys
 import config
 from App import controller
 from DISClib.ADT import stack
 from DISClib.DataStructures import listiterator as it
 import timeit
+
 assert config
-import sys 
+import sys
 
 """
 La vista se encarga de la interacción con el usuario.
@@ -51,6 +51,7 @@ medium_file = "taxi-trips-wrvz-psew-subset-medium.csv"
 large_file = "taxi-trips-wrvz-psew-subset-large.csv"
 recursionlimit = sys.setrecursionlimit(16000)
 
+
 # ___________________________________________________
 #  Menu principal
 # ___________________________________________________
@@ -65,6 +66,7 @@ def print_menu():
     print('6- Mejor horario')
     print('0- Salir')
     print('-----------------------------------------------')
+
 
 def option_two():
     selection = input("Seleccione un archivo a cargar:\na- Small\nb- Medium\nc- Large\nIngrese una letra: ")
@@ -82,7 +84,8 @@ def option_two():
     print('Elementos en el arbol: ' + str(controller.index_size(cont)))
     print('Mayor llave: ' + str(controller.maxKey(cont)))
     print('Menor llave: ' + str(controller.minKey(cont)))
-    
+
+
 def option_three():
     top_number_1 = int(input("Ingrese el rango para el top de compañías ordenadas por cantidad de taxis afiliados: "))
     top_number_2 = int(input("Ingrese el rango para el top de compañías que más servicios prestaron: "))
@@ -90,22 +93,23 @@ def option_three():
     companies_total = controller.companies_total(cont)
     top_companies_by_taxis = controller.top_companies_by_taxis(cont, top_number_1)
     top_companies_by_services = controller.top_companies_by_services(cont, top_number_2)
-    print("\nNúmero total de taxis en los servicios reportados:",taxis_total)
-    print("Número total de compañías que tienen al menos un taxi inscrito:",companies_total)
+    print("\nNúmero total de taxis en los servicios reportados:", taxis_total)
+    print("Número total de compañías que tienen al menos un taxi inscrito:", companies_total)
     print("----------------------------------------------")
-    print("Top",top_number_1,"de compañías por cantidad de taxis afiliados")
+    print("Top", top_number_1, "de compañías por cantidad de taxis afiliados")
     iterator_1 = it.newIterator(top_companies_by_taxis)
     while it.hasNext(iterator_1):
         company = it.next(iterator_1)
-        print(company[0],"| Taxis afiliados:",company[1])
+        print(company[0], "| Taxis afiliados:", company[1])
     print("----------------------------------------------")
-    print("Top",top_number_2,"de compañías por cantidad de servicios prestados")
+    print("Top", top_number_2, "de compañías por cantidad de servicios prestados")
     iterator_2 = it.newIterator(top_companies_by_services)
     while it.hasNext(iterator_2):
         company = it.next(iterator_2)
-        print(company[0],"| Servicios prestados:",company[1])
+        print(company[0], "| Servicios prestados:", company[1])
     print("----------------------------------------------")
-    
+
+
 def option_four():
     print('\nBuscando taxis con mejor puntaje en un rango de fechas')
     initialDate = input('Rango inicial (YYYY-MM-DD): ').strip()
@@ -115,6 +119,7 @@ def option_four():
         number_of_taxis = int(input('Número de taxis: '))
         return controller.getTaxisbyRange(lista, number_of_taxis)
 
+
 def option_five():
     print('\nBuscando taxis con mejor puntaje en una fecha')
     initialDate = input('Rango inicial (YYYY-MM-DD): ').strip()
@@ -122,6 +127,20 @@ def option_five():
     if lista != None:
         number_of_taxis = int(input('Número de taxis: '))
         return controller.getTaxisbyRange(lista, number_of_taxis)
+
+
+def option_six():
+    print('\nServicio de consulta del mejor horario para desplazarse entre dos "Community Area"')
+    origin_area, destination_area = input('Ingrese area de origen: '), input('Ingrese area de destino: ')
+    initial_date, final_date = input('Rango inicial (YYYY-MM-DD): '), input('Rango final (YYYY-MM-DD): ')
+    start_time, route, estimated_time = controller.best_schedule(cont, origin_area,
+                                                                 destination_area, initial_date, final_date)
+    print(f'\nSe recomienda iniciar el viaje a la hora {start_time}.\n')
+    print('La secuencia de "community areas" recomendadas a seguir es la siguiente:')
+    for pos, area in enumerate(route):
+        print(f'{pos}. Community Area #{area}')
+    print(f'Estimando un tiempo de duracion de {estimated_time} segundos de viaje.')
+
 
 """
 Menu principal
@@ -133,13 +152,14 @@ while True:
         print('\nInicializando...')
         cont = controller.init_catalog()
     elif int(inputs[0]) == 2:
-        option_two()        
+        option_two()
     elif int(inputs[0]) == 3:
-      option_three()
+        option_three()
     elif int(inputs[0]) == 4:
-      option_four()
+        option_four()
     elif int(inputs[0]) == 5:
-      option_five() 
+        option_five()
+    elif int(inputs[0]) == 6:
+        option_six()
     else:
         sys.exit(0)
-sys.exit(0)

@@ -27,6 +27,7 @@
 
 import config
 from DISClib.ADT import list as lt
+
 assert config
 
 """
@@ -42,7 +43,7 @@ def insertionSort(lst, lessfunction):
     while pos1 <= size:
         pos2 = pos1
         while (pos2 > 1) and (lessfunction(
-              (lt.getElement(lst, pos2), lt.getElement(lst, pos2-1)))):
-            lt.exchange(lst, pos2, pos2-1)
+                (lt.getElement(lst, pos2), lt.getElement(lst, pos2 - 1)))):
+            lt.exchange(lst, pos2, pos2 - 1)
             pos2 -= 1
         pos1 += 1

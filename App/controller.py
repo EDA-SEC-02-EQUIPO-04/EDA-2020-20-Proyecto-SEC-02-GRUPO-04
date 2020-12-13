@@ -29,6 +29,7 @@ from App import model
 import csv
 from time import process_time
 import datetime
+
 """
 El controlador se encarga de mediar entre la vista y el modelo.
 Existen algunas operaciones en las que se necesita invocar
@@ -36,6 +37,7 @@ el modelo varias veces o integrar varias de las respuestas
 del modelo en una sola respuesta.  Esta responsabilidad
 recae sobre el controlador.
 """
+
 
 # ___________________________________________________
 #  Inicializacion del catalogo
@@ -51,6 +53,7 @@ def init_catalog():
 
     return catalog
 
+
 # ___________________________________________________
 #  Funciones para la carga de datos y almacenamiento
 #  de datos en los modelos
@@ -65,28 +68,30 @@ def load_data(catalog, taxis_file):
     t1_stop = process_time()
     print('Tiempo de ejecución ', t1_stop - t1_start, ' segundos')
 
+
 def load_taxis(catalog, taxisfile):
     taxisfile = cf.data_dir + taxisfile
     with open(taxisfile, encoding='utf-8') as input_file:
         reader = csv.DictReader(input_file, delimiter=',')
         for taxi in reader:
             if taxi['taxi_id'] == 'NA':
-                None
-            if taxi['taxi_id'] == None:
-                None
-            if taxi['trip_total'] == float(0):
-                None
-            if taxi['trip_miles'] == float(0):
-                None
-            if taxi['trip_total'] == None or taxi['trip_miles'] == None:
-                None
-            if taxi['trip_total'] == "":
-                None
-            if taxi['trip_miles'] == "":
-                None
+                continue
+            elif taxi['taxi_id'] is None:
+                continue
+            elif taxi['trip_total'] == float(0):
+                continue
+            elif taxi['trip_miles'] == float(0):
+                continue
+            elif taxi['trip_total'] is None or taxi['trip_miles'] is None:
+                continue
+            elif taxi['trip_total'] == "":
+                continue
+            elif taxi['trip_miles'] == "":
+                continue
             else:
                 model.addTaxi(catalog, taxi)
     return catalog
+
 
 # ___________________________________________________
 #  Funciones para consultas
@@ -97,41 +102,59 @@ def getTaxis(catalog, initialDate, finalDate):
     lista = model.TaxisbyRange(catalog, initialDate.date(), finalDate.date())
     return lista
 
+
 def getTaxisbyRange(lista, number_of_taxis):
     """
     Retorna los N taxis según los puntos obtenidos
-    """    
+    """
     return model.getTaxisbyRange(lista, number_of_taxis)
+
 
 def index_height(catalog):
     return model.index_height(catalog)
 
+
 def index_size(catalog):
     return model.index_size(catalog)
+
 
 def maxKey(catalog):
     return model.maxKey(catalog)
 
+
 def minKey(catalog):
     return model.minKey(catalog)
+
+
 def loadFile(catalog, service_file):
     service_file = cf.data_dir + service_file
-    input_file = csv.DictReader(open(service_file, encoding= 'utf-8'), delimiter = ',')
+    input_file = csv.DictReader(open(service_file, encoding='utf-8'), delimiter=',')
     for service in input_file:
         model.add_taxi(catalog, service)
         model.add_company(catalog, service)
     return catalog
+
+
 # ___________________________________________________
 #  Funciones para consultas
 # ___________________________________________________
 def taxis_total(catalog):
     return model.taxis_total(catalog)
 
+
 def companies_total(catalog):
     return model.companies_total(catalog)
+
 
 def top_companies_by_taxis(catalog, top_number):
     return model.top_companies_by_taxis(catalog, top_number)
 
+
 def top_companies_by_services(catalog, top_number):
     return model.top_companies_by_services(catalog, top_number)
+
+
+def best_schedule(catalog, origin_area, destination_area, initial_date, final_date):
+    initial_date = datetime.datetime.strptime(initial_date, '%Y-%m-%d')
+    final_date = datetime.datetime.strptime(final_date, '%Y-%m-%d')
+    return model.best_schedule(catalog, origin_area, destination_area, initial_date.date(), final_date.date())

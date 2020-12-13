@@ -26,6 +26,7 @@
 
 import config
 from DISClib.DataStructures import graphstructure as gr
+
 assert config
 
 """

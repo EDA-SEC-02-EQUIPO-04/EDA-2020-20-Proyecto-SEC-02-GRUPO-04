@@ -26,6 +26,7 @@
 
 import config
 from DISClib.DataStructures import adjlist as alt
+
 assert config
 
 """

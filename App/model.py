@@ -35,12 +35,14 @@ from DISClib.Algorithms.Graphs import dijsktra as djk
 from DISClib.Utils import error as error
 from DISClib.ADT import minpq as min
 import datetime
+
 assert config
 
 """
 En este archivo definimos los TADs que vamos a usar y las operaciones
 de creacion y consulta sobre las estructuras de datos.
 """
+
 
 # -----------------------------------------------------
 #                       API
@@ -60,15 +62,17 @@ def newTaxiEntry(taxi):
                                       maptype='PROBING',
                                       comparefunction=compare_ids),
              'lsttaxis': lt.newList('SINGLE_LINKED', compare_dates)
-            } 
+             }
 
     return taxis
+
 
 def newServiceEntry(taxi):
     entry = {'taxi': taxi,
              'lsttaxis': lt.newList('SINGLE_LINKED', compare_ids)
-            }
+             }
     return entry
+
 
 def new_taxi(taxi):
     taxis = {'taxi': taxi,
@@ -76,8 +80,9 @@ def new_taxi(taxi):
              'money': 0,
              'miles': 0,
              'points': 0
-           }
+             }
     return taxis
+
 
 # Funciones para agregar informacion
 def add_taxi(catalog, service):
@@ -86,6 +91,7 @@ def add_taxi(catalog, service):
     if lt.isPresent(taxi_lst, taxi) == 0:
         lt.addLast(taxi_lst, taxi)
     return catalog
+
 
 def add_company(catalog, service):
     companies_lst = catalog["companies"]["companies_lst"]
@@ -102,7 +108,7 @@ def add_company(catalog, service):
 
     if m.get(companies_per_services, company) != None:
         services_number = me.getValue(m.get(companies_per_services, company))
-        services_number += 1 
+        services_number += 1
     else:
         services_number = 1
     m.put(companies_per_services, company, services_number)
@@ -121,6 +127,7 @@ def add_company(catalog, service):
         m.put(companies_per_taxis, company, value_dict)
     return catalog
 
+
 # ==============================
 # Funciones de consulta
 # ==============================
@@ -129,10 +136,12 @@ def taxis_total(catalog):
     size = lt.size(taxis_lst)
     return size
 
+
 def companies_total(catalog):
     companies_lst = catalog["companies"]["companies_lst"]
     size = lt.size(companies_lst)
     return size
+
 
 def top_companies_by_taxis(catalog, top_number):
     companies_per_taxis = catalog["companies"]["companies_per_taxis"]
@@ -156,6 +165,7 @@ def top_companies_by_taxis(catalog, top_number):
         counter += 1
     return lst
 
+
 def top_companies_by_services(catalog, top_number):
     companies_per_services = catalog["companies"]["companies_per_services"]
     key_lst = m.keySet(companies_per_services)
@@ -177,7 +187,7 @@ def top_companies_by_services(catalog, top_number):
         greater = 0
         counter += 1
     return lst
-        
+
 
 def alpha_fuction(miles, money, services):
     """Calculo función alfa de puntos
@@ -190,8 +200,9 @@ def alpha_fuction(miles, money, services):
     if money == float(0):
         None
     else:
-        alpha = (miles/money)*services
+        alpha = (miles / money) * services
         return alpha
+
 
 def addTaxi(catalog, taxi):
     updateDateIndex(catalog['date_index'], taxi)
@@ -207,7 +218,7 @@ def addDateIndex(datentry, information):
     serviceIndex = datentry['serviceIndex']
     taxi_id = information['taxi_id']
     servicentry = m.get(serviceIndex, taxi_id)
-    
+
     if servicentry is None:
         entry = newServiceEntry(taxi_id)
         lt.addLast(entry['lsttaxis'], information)
@@ -235,10 +246,11 @@ def updateDateIndex(map, taxi):
         om.put(map, taxi_date_start.date(), datentry)
     else:
         datentry = me.getValue(entry)
-    addDateIndex(datentry, taxi) 
+    addDateIndex(datentry, taxi)
     return map
 
-def TaxisbyRange(catalog, initialDate, finalDate): #Taxis de acuerdo a la fecha seleccionada
+
+def TaxisbyRange(catalog, initialDate, finalDate):  # Taxis de acuerdo a la fecha seleccionada
     lst = om.values(catalog['date_index'], initialDate, finalDate)
     listiterator = it.newIterator(lst)
     while it.hasNext(listiterator):
@@ -253,49 +265,50 @@ def TaxisbyRange(catalog, initialDate, finalDate): #Taxis de acuerdo a la fecha 
                 taxis = catalog['taxis_filter']
                 if existtaxi:
                     entry = m.get(taxis, taxis_id)
-                    taxiss = me.getValue(entry)                   
+                    taxiss = me.getValue(entry)
                 else:
                     taxiss = new_taxi(taxis_id)
                     m.put(taxis, taxis_id, taxiss)
 
-                taxiss['services'] += 1    
+                taxiss['services'] += 1
                 taxiss['money'] += float(money)
                 taxiss['miles'] += float(miles)
 
-                #Cálculo de puntos 
+                # Cálculo de puntos
 
                 puntos = alpha_fuction(taxiss['miles'], taxiss['money'], taxiss['services'])
                 taxiss['points'] = puntos
-            else: 
+            else:
                 None
 
-    lst = m.keySet(catalog['taxis_filter'])    
+    lst = m.keySet(catalog['taxis_filter'])
     iterator = it.newIterator(lst)
     lista_taxis = []
     mayor = []
 
     while it.hasNext(iterator):
-        taxis = it.next(iterator)        
-        points = m.get(catalog['taxis_filter'], taxis)['value'] 
-        if points['miles'] != 0.0 and points['money'] != 0.0 :                
+        taxis = it.next(iterator)
+        points = m.get(catalog['taxis_filter'], taxis)['value']
+        if points['miles'] != 0.0 and points['money'] != 0.0:
             lista_taxis.append(points)
-            m.remove(catalog['taxis_filter'], taxis)     
+            m.remove(catalog['taxis_filter'], taxis)
 
     if len(lista_taxis) == 0:
         print('No se registran taxis, vuelva a intentarlo')
         mayor = None
     else:
-        while len(lista_taxis)-1 != 0:        
-            for i in range(len(lista_taxis)-1): 
-                if lista_taxis[i]['points'] >= lista_taxis[i+1]['points']:
+        while len(lista_taxis) - 1 != 0:
+            for i in range(len(lista_taxis) - 1):
+                if lista_taxis[i]['points'] >= lista_taxis[i + 1]['points']:
                     aux = lista_taxis[i]
-                    lista_taxis[i] = lista_taxis[i+1]
-                    lista_taxis[i+1] = aux
-                
-            mayor_taxi = lista_taxis.pop(len(lista_taxis)-1)
+                    lista_taxis[i] = lista_taxis[i + 1]
+                    lista_taxis[i + 1] = aux
+
+            mayor_taxi = lista_taxis.pop(len(lista_taxis) - 1)
             mayor.append(mayor_taxi)
-        print('\nSe tienen ' + str(len(mayor)) + ' taxis, seleccione un número menor o igual\n' )
+        print('\nSe tienen ' + str(len(mayor)) + ' taxis, seleccione un número menor o igual\n')
     return mayor
+
 
 def getTaxisbyRange(list, number_of_taxis):
     if list == None:
@@ -312,14 +325,91 @@ def getTaxisbyRange(list, number_of_taxis):
             print ('\033[0m')
     else:
         for i in range(0, number_of_taxis):
-            print('\n' + str(i+1) + '\n------------------------------------------------------------')
+            print('\n' + str(i + 1) + '\n------------------------------------------------------------')
             print('\033[1m' + 'Taxi id: ' + '\033[0m' + list[i]['taxi'])
             print('\033[1m' + 'Taxi services: ' + '\033[0m' + str(list[i]['services']))
-            print('\033[1m' +'Taxi money: ' + '\033[0m' + str(list[i]['money']))
-            print('\033[1m' +'Taxi miles: ' + '\033[0m' + str(list[i]['miles']))
-            print('\033[1m' +'Taxi points: '+ '\033[0m' + str(list[i]['points']))
+            print('\033[1m' + 'Taxi money: ' + '\033[0m' + str(list[i]['money']))
+            print('\033[1m' + 'Taxi miles: ' + '\033[0m' + str(list[i]['miles']))
+            print('\033[1m' + 'Taxi points: ' + '\033[0m' + str(list[i]['points']))
             print('------------------------------------------------------------')
-            print ('\033[0m')
+            print('\033[0m')
+
+
+def best_schedule(catalog, origin_area, destination_area, initial_date, final_date):
+    route = []
+    estimated = 0
+    found_d = False
+    found_p = False
+    lst = om.values(catalog['date_index'], initial_date, final_date)
+    listiterator = it.newIterator(lst)
+    while it.hasNext(listiterator):
+        lstdate = it.next(listiterator)['lsttaxis']
+        iterator_2 = it.newIterator(lstdate)
+        while it.hasNext(iterator_2):
+            taxi = it.next(iterator_2)
+            if taxi['pickup_community_area'] == '':
+                if taxi['dropoff_community_area'] == '':
+                    continue
+                if float(taxi['dropoff_community_area']) == float(destination_area):
+                    dropoff_taxi = taxi
+                    found_d = True
+                    continue
+            else:
+                if float(taxi['pickup_community_area']) == float(origin_area):
+                    pickup_taxi = taxi
+                    found_p = True
+                    continue
+            if taxi['dropoff_community_area'] == '':
+                continue
+            if float(taxi['dropoff_community_area']) == float(destination_area):
+                dropoff_taxi = taxi
+                found_d = True
+                continue
+    if not found_d and not found_p:
+        return '00:00', ['No hay rutas a esas áreas en el horario seleccionado.'], '0'
+    route.append(pickup_taxi['pickup_community_area'])
+    start_time = pickup_taxi['trip_start_timestamp']
+    estimated += float(pickup_taxi['trip_seconds'])
+    listiterator = it.newIterator(lst)
+    while it.hasNext(listiterator):
+        lstdate = it.next(listiterator)['lsttaxis']
+        iterator_2 = it.newIterator(lstdate)
+        while it.hasNext(iterator_2):
+            path = 'Ruta incompleta, dado que no hay camino'
+            taxi = it.next(iterator_2)
+            if pickup_taxi['pickup_community_area'] == taxi['pickup_community_area']:
+                path, time_travel = compare_routes(taxi, lst, dropoff_taxi)
+            if path != 'Ruta incompleta, dado que no hay camino':
+                for area in path:
+                    route.append(area)
+                estimated += time_travel
+                route.append(dropoff_taxi['dropoff_community_area'])
+                estimated += float(dropoff_taxi['trip_seconds'])
+                return start_time, route, estimated
+    route.append(path)
+    estimated += time_travel
+    route.append(dropoff_taxi['dropoff_community_area'])
+    estimated += float(dropoff_taxi['trip_seconds'])
+    return start_time, route, estimated
+
+
+def compare_routes(taxi, lst, dropoff_taxi):
+    path = []
+    time_travel = 0
+    listiterator = it.newIterator(lst)
+    while it.hasNext(listiterator):
+        lstdate = it.next(listiterator)['lsttaxis']
+        iterator_2 = it.newIterator(lstdate)
+        while it.hasNext(iterator_2):
+            taxi_compare = it.next(iterator_2)
+            if taxi['dropoff_community_area'] == taxi_compare['pickup_community_area']:
+                taxi = taxi_compare
+                time_travel += float(taxi['trip_seconds'])
+                path.append(taxi['pickup_community_area'])
+                if taxi['dropoff_community_area'] == dropoff_taxi['dropoff_community_area']:
+                    return path, time_travel
+    return 'Ruta incompleta, dado que no hay camino', 0
+
 
 def index_height(catalog):
     """
@@ -327,11 +417,13 @@ def index_height(catalog):
     """
     return om.height(catalog['date_index'])
 
+
 def index_size(catalog):
     """
     Número de elementos 
     """
     return om.size(catalog['date_index'])
+
 
 def maxKey(catalog):
     """
@@ -339,11 +431,14 @@ def maxKey(catalog):
     """
     return om.maxKey(catalog['date_index'])
 
+
 def minKey(catalog):
     """
     Llave más pequeña
     """
     return om.minKey(catalog['date_index'])
+
+
 # ==============================
 # Funciones Helper
 # ==============================
@@ -363,6 +458,7 @@ def compare_dates(date1, date2):
     else:
         return -1
 
+
 def compare_taxis(id1, id2):
     if id1 == id2:
         return 0
@@ -370,6 +466,7 @@ def compare_taxis(id1, id2):
         return 1
     else:
         return -1
+
 
 def compare_ids(id_, tag):
     entry = me.getKey(tag)
@@ -380,6 +477,7 @@ def compare_ids(id_, tag):
     else:
         return 0
 
+
 def compare_points(points_1, points_2):
     """
     Compara dos fechas
@@ -387,10 +485,11 @@ def compare_points(points_1, points_2):
     if points_1 == points_2:
         return 0
     elif (points_1 > points_2):
-      return 1
+        return 1
     else:
-      return -1
-      
+        return -1
+
+
 def compare_companies(company1, company2):
     if type(company2) is not str:
         company2 = company2["key"]

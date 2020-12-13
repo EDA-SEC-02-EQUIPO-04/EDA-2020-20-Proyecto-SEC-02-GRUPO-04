@@ -24,6 +24,7 @@ import pytest
 import config
 from DISClib.DataStructures import listiterator as it
 from DISClib.ADT import queue as q
+
 assert config
 
 list_type = 'ARRAY_LIST'
@@ -68,7 +69,7 @@ def test_queueElements():
     while it.hasNext(iterator):
         element = it.next(iterator)
         result = ("".join(str(key) + ": " + str(value) + ",  "
-                  for key, value in element.items()))
+                          for key, value in element.items()))
         print(result)
 
 
@@ -165,7 +166,7 @@ def test_peek_dequeue():
     total = q.size(queue)
     while not (q.isEmpty(queue)):
         peek = q.peek(queue)
-        assert(q.dequeue(queue) == peek)
+        assert (q.dequeue(queue) == peek)
         total -= 1
         assert (total == q.size(queue))
 
@@ -182,34 +183,34 @@ def test_enqueue_dequeue():
     assert (q.isEmpty(queue))
 
     q.enqueue(queue, book5)
-    assert(q.size(queue) == 1)
-    assert(q.peek(queue) == q.dequeue(queue))
-    assert(q.size(queue) == 0)
+    assert (q.size(queue) == 1)
+    assert (q.peek(queue) == q.dequeue(queue))
+    assert (q.size(queue) == 0)
 
     q.enqueue(queue, book6)
-    assert(q.size(queue) == 1)
-    assert(q.peek(queue) == q.dequeue(queue))
-    assert(q.size(queue) == 0)
+    assert (q.size(queue) == 1)
+    assert (q.peek(queue) == q.dequeue(queue))
+    assert (q.size(queue) == 0)
 
     q.enqueue(queue, book3)
-    assert(q.size(queue) == 1)
-    assert(q.peek(queue) == q.dequeue(queue))
-    assert(q.size(queue) == 0)
+    assert (q.size(queue) == 1)
+    assert (q.peek(queue) == q.dequeue(queue))
+    assert (q.size(queue) == 0)
 
     q.enqueue(queue, book10)
-    assert(q.size(queue) == 1)
-    assert(q.peek(queue) == q.dequeue(queue))
-    assert(q.size(queue) == 0)
+    assert (q.size(queue) == 1)
+    assert (q.peek(queue) == q.dequeue(queue))
+    assert (q.size(queue) == 0)
 
     q.enqueue(queue, book1)
-    assert(q.size(queue) == 1)
-    assert(q.peek(queue) == q.dequeue(queue))
-    assert(q.size(queue) == 0)
+    assert (q.size(queue) == 1)
+    assert (q.peek(queue) == q.dequeue(queue))
+    assert (q.size(queue) == 0)
 
     q.enqueue(queue, book2)
-    assert(q.size(queue) == 1)
-    assert(q.peek(queue) == q.dequeue(queue))
-    assert(q.size(queue) == 0)
+    assert (q.size(queue) == 1)
+    assert (q.peek(queue) == q.dequeue(queue))
+    assert (q.size(queue) == 0)
 
     q.enqueue(queue, book8)
     q.enqueue(queue, book4)
@@ -232,7 +233,7 @@ def test_error_dequeue():
     """
     queue = q.newQueue(list_type)
     assert (q.size(queue) == 0)
-    assert(q.isEmpty(queue))
+    assert (q.isEmpty(queue))
 
     with pytest.raises(Exception):
         q.dequeue(queue)

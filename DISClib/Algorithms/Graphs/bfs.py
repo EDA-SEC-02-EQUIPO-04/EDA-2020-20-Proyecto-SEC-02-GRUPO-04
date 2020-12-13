@@ -31,6 +31,7 @@ from DISClib.ADT import queue
 from DISClib.ADT import map as map
 from DISClib.ADT import stack
 from DISClib.Utils import error as error
+
 assert config
 
 
@@ -48,9 +49,9 @@ def BreadhtFisrtSearch(graph, source):
     """
     try:
         search = {
-                  'source': source,
-                  'visited': None
-                  }
+            'source': source,
+            'visited': None
+        }
         search['visited'] = map.newMap(numelements=g.numVertices(graph),
                                        maptype='PROBING',
                                        comparefunction=graph['comparefunction']

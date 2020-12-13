@@ -28,6 +28,7 @@ import config
 from DISClib.Utils import error as error
 from DISClib.DataStructures import arraylist as alt
 from DISClib.DataStructures import singlelinkedlist as slt
+
 assert config
 
 """

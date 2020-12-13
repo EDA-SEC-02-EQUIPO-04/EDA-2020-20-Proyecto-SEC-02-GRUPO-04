@@ -27,6 +27,7 @@
 
 import config as cf
 from DISClib.ADT import list as lt
+
 assert cf
 
 """
@@ -45,7 +46,7 @@ def partition(lst, lo, hi, lessequalfunction):
     follower = leader = lo
     while leader < hi:
         if (lessequalfunction(
-           (lt.getElement(lst, leader), lt.getElement(lst, hi)))):
+                (lt.getElement(lst, leader), lt.getElement(lst, hi)))):
             lt.exchange(lst, follower, leader)
             follower += 1
         leader += 1
@@ -62,8 +63,8 @@ def sort(lst, lo, hi, lessequalfunction):
     if (lo >= hi):
         return
     pivot = partition(lst, lo, hi, lessequalfunction)
-    sort(lst, lo, pivot-1, lessequalfunction)
-    sort(lst, pivot+1, hi, lessequalfunction)
+    sort(lst, lo, pivot - 1, lessequalfunction)
+    sort(lst, pivot + 1, hi, lessequalfunction)
 
 
 def quickSort(lst, lessequalfunction):

@@ -28,6 +28,7 @@
 import config
 from DISClib.DataStructures import bst as bst
 from DISClib.DataStructures import rbt as rbt
+
 assert config
 
 

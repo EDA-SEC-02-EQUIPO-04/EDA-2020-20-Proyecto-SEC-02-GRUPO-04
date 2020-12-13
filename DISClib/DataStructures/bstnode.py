@@ -57,7 +57,7 @@ def getValue(node):
         Exception
     """
     if (node is not None):
-        return(node['value'])
+        return (node['value'])
     return node
 
 
@@ -71,5 +71,5 @@ def getKey(node):
         Exception
     """
     if (node is not None):
-        return(node['key'])
+        return (node['key'])
     return node

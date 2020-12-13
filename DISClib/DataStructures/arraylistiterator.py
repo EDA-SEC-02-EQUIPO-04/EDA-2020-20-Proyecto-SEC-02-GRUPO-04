@@ -25,7 +25,6 @@
  *
  """
 
-
 """
   Este módulo implementa un iterador para recorrer los elementos de una lista
 """

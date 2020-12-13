@@ -29,8 +29,8 @@ import config
 from DISClib.DataStructures import rbtnode as node
 from DISClib.Utils import error as error
 from DISClib.ADT import list as lt
-assert config
 
+assert config
 
 """
 Implementación de una tabla de simbolos ordenada, mediante un arbol binario
@@ -40,6 +40,7 @@ Este código está basados en la implementación
 propuesta por R.Sedgewick y Kevin Wayne en su libro
 Algorithms, 4th Edition
 """
+
 
 # ________________________________________________________________________
 #                     API  RBT
@@ -626,19 +627,19 @@ def insertNode(root, key, value, comparefunction):
         Exception
     """
     try:
-        if root is None:     # Se trata de la raíz del árbol
+        if root is None:  # Se trata de la raíz del árbol
             root = node.newNode(key, value, 1, node.RED)
             return root
 
         cmp = comparefunction(key, root['key'])
 
-        if (cmp < 0):     # La llave a insertar es menor que la raiz
-            root['left'] = insertNode(root['left'],  key, value,
+        if (cmp < 0):  # La llave a insertar es menor que la raiz
+            root['left'] = insertNode(root['left'], key, value,
                                       comparefunction)
-        elif (cmp > 0):    # La llave a insertar es mayor que la raíz
+        elif (cmp > 0):  # La llave a insertar es mayor que la raíz
             root['right'] = insertNode(root['right'], key, value,
                                        comparefunction)
-        else:              # La llave ya se encuentra en la tabla
+        else:  # La llave ya se encuentra en la tabla
             root['value'] = value
 
         # Se ajusta el balanceo del arbol
@@ -915,7 +916,7 @@ def selectKey(root, key):
             if (cont > key):
                 return selectKey(root['left'], key)
             elif (cont < key):
-                return selectKey(root['right'], key-cont-1)
+                return selectKey(root['right'], key - cont - 1)
             else:
                 return root
         return root
@@ -966,8 +967,7 @@ def deleteMaxTree(root):
             return None
 
         if ((not isRed(root['right'])) and
-           ((not isRed(root['right']['left'])))):
-
+                ((not isRed(root['right']['left'])))):
             root = moveRedRight(root)
 
         root['right'] = deleteMaxTree(root['right'])
@@ -1061,7 +1061,7 @@ def removeKey(root, key, cmpfunction):
     try:
         if (cmpfunction(key, root['key']) < 0):
             if ((not isRed(root['left'])) and
-               (not isRed(root['left']['left']))):
+                    (not isRed(root['left']['left']))):
                 root = moveRedLeft(root)
             root['left'] = removeKey(root['left'], key, cmpfunction)
         else:
@@ -1069,11 +1069,11 @@ def removeKey(root, key, cmpfunction):
                 root = rotateRight(root)
 
             if ((cmpfunction(key, root['key']) == 0) and
-               (root['right'] is None)):
+                    (root['right'] is None)):
                 return None
 
             if ((not isRed(root['right']) and
-               (not isRed(root['right']['left'])))):
+                 (not isRed(root['right']['left'])))):
                 root = moveRedRight(root)
 
             if ((cmpfunction(key, root['key']) == 0)):

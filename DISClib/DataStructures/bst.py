@@ -29,14 +29,15 @@ import config
 from DISClib.DataStructures import bstnode
 from DISClib.Utils import error as error
 from DISClib.ADT import list as lt
-assert config
 
+assert config
 
 """
   Este código está basado en la implementación
   propuesta por R.Sedgewick y Kevin Wayne en su libro
   Algorithms, 4th Edition
 """
+
 
 #  ------------------------------------------------------------
 #                       API TAD_BST
@@ -415,6 +416,7 @@ def values(bst, keylo, keyhi):
     except Exception as exp:
         error.reraise(exp, 'BST:Values')
 
+
 # _____________________________________________________________________
 #            Funciones Helper
 # _____________________________________________________________________
@@ -439,15 +441,15 @@ def insertNode(root, key, value, cmpfunction):
             root = bstnode.newNode(key, value, 1)
         else:
             cmp = cmpfunction(key, root['key'])
-            if (cmp < 0):           # La llave a insertar es menor que la raiz
+            if (cmp < 0):  # La llave a insertar es menor que la raiz
                 root['left'] = insertNode(root['left'], key, value,
                                           cmpfunction)
 
-            elif (cmp > 0):        # La llave a insertar es mayor que la raiz
+            elif (cmp > 0):  # La llave a insertar es mayor que la raiz
                 root['right'] = insertNode(root['right'], key, value,
                                            cmpfunction)
 
-            else:                  # La llave a insertar es igual que la raiz
+            else:  # La llave a insertar es igual que la raiz
                 root['value'] = value
         leftsize = sizeTree(root['left'])
         rightsize = sizeTree(root['right'])
@@ -499,11 +501,11 @@ def removeNode(root, key, cmpfunction):
         if (root is not None):
             cmp = cmpfunction(key, root['key'])
             if (cmp == 0):  # La llave es la que se busca
-                if (root['right'] is None):   # No tiene hijo derecho
+                if (root['right'] is None):  # No tiene hijo derecho
                     return root['left']
                 elif (root['left'] is None):  # No tiene hijo izquierdo
                     return root['right']
-                else:      # se cambia por el menor de los mayores
+                else:  # se cambia por el menor de los mayores
                     elem = root
                     root = minKeyNode(elem['right'])
                     root['right'] = deleteMinTree(elem['right'])
@@ -743,7 +745,7 @@ def selectKey(root, key):
             if (cont > key):
                 return selectKey(root['left'], key)
             elif (cont < key):
-                return selectKey(root['right'], key-cont-1)
+                return selectKey(root['right'], key - cont - 1)
             else:
                 return root
         return root

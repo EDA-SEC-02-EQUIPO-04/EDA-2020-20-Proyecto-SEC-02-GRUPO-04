@@ -31,6 +31,7 @@ from DISClib.ADT import stack
 from DISClib.Algorithms.Graphs import dfo
 from DISClib.Utils import error as error
 from DISClib.ADT import map
+
 assert config
 
 
@@ -49,11 +50,11 @@ def KosarajuSCC(graph):
     """
     try:
         scc = {
-                'idscc': None,
-                'marked': None,
-                'grmarked': None,
-                'components': 0
-            }
+            'idscc': None,
+            'marked': None,
+            'grmarked': None,
+            'components': 0
+        }
 
         scc['idscc'] = map.newMap(g.numVertices(graph),
                                   maptype='PROBING',
@@ -127,6 +128,7 @@ def connectedComponents(scc):
         return scc['components']
     except Exception as exp:
         error.reraise(exp, 'scc:components')
+
 
 # --------------------------------------------------
 #              Funciones Auxiliares

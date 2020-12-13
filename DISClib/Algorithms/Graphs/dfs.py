@@ -30,6 +30,7 @@ from DISClib.DataStructures import listiterator as it
 from DISClib.ADT import map as map
 from DISClib.ADT import stack as stk
 from DISClib.Utils import error as error
+
 assert config
 
 
@@ -47,9 +48,9 @@ def DepthFirstSearch(graph, source):
     """
     try:
         search = {
-                  'source': source,
-                  'visited': None,
-                  }
+            'source': source,
+            'visited': None,
+        }
 
         search['visited'] = map.newMap(numelements=g.numVertices(graph),
                                        maptype='PROBING',

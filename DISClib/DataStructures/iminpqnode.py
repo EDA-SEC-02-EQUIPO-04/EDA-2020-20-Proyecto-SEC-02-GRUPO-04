@@ -19,6 +19,7 @@
  """
 
 import config
+
 assert config
 
 
