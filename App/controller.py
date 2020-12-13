@@ -41,6 +41,7 @@ recae sobre el controlador.
 #  Inicializacion del catalogo
 # ___________________________________________________
 def init_catalog():
+    """
     Llama a la función de inicialización del analizador
     """
     t1_start = process_time()
