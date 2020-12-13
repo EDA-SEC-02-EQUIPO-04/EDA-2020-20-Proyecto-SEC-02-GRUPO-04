@@ -41,19 +41,20 @@ recae sobre el controlador.
 #  Inicializacion del catalogo
 # ___________________________________________________
 def init_catalog():
-    """
     Llama a la función de inicialización del analizador
     """
     t1_start = process_time()
     catalog = model.new_catalog()
     t1_stop = process_time()
     print('Tiempo de ejecución ', t1_stop - t1_start, ' segundos')
+
     return catalog
 
 # ___________________________________________________
 #  Funciones para la carga de datos y almacenamiento
 #  de datos en los modelos
 # ___________________________________________________
+
 def load_data(catalog, taxis_file):
     """
     Carga los datos del archivo
@@ -86,7 +87,6 @@ def load_taxis(catalog, taxisfile):
                 model.addTaxi(catalog, taxi)
     return catalog
 
-
 # ___________________________________________________
 #  Funciones para consultas
 # ___________________________________________________
@@ -113,3 +113,24 @@ def maxKey(catalog):
 
 def minKey(catalog):
     return model.minKey(catalog)
+def loadFile(catalog, service_file):
+    service_file = cf.data_dir + service_file
+    input_file = csv.DictReader(open(service_file, encoding= 'utf-8'), delimiter = ',')
+    for service in input_file:
+        model.add_taxi(catalog, service)
+        model.add_company(catalog, service)
+    return catalog
+# ___________________________________________________
+#  Funciones para consultas
+# ___________________________________________________
+def taxis_total(catalog):
+    return model.taxis_total(catalog)
+
+def companies_total(catalog):
+    return model.companies_total(catalog)
+
+def top_companies_by_taxis(catalog, top_number):
+    return model.top_companies_by_taxis(catalog, top_number)
+
+def top_companies_by_services(catalog, top_number):
+    return model.top_companies_by_services(catalog, top_number)

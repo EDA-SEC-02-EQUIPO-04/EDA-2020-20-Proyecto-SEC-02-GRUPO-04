@@ -29,6 +29,7 @@ import sys
 import config
 from App import controller
 from DISClib.ADT import stack
+from DISClib.DataStructures import listiterator as it
 import timeit
 assert config
 import sys 
@@ -44,29 +45,67 @@ operación seleccionada.
 #  Variables
 # ___________________________________________________
 
-taxisfile = 'taxi_trips_medium.csv'
+
+small_file = "taxi-trips-wrvz-psew-subset-small.csv"
+medium_file = "taxi-trips-wrvz-psew-subset-medium.csv"
+large_file = "taxi-trips-wrvz-psew-subset-large.csv"
 recursionlimit = sys.setrecursionlimit(16000)
 
 # ___________________________________________________
 #  Menu principal
 # ___________________________________________________
-
-def printMenu():
+def print_menu():
     print('\n')
-    print('--------------------------------------------------')
-    print('1- Inicializar Analizador')
-    print('2- Cargar información taxis en Chicago')
-    print('3- Información ?')
-    print('4- Número de taxis en los servicios reportados')
-    print('5- Número total de compañias con un taxi inscrito')
-    print('6- Top compañias con taxis afiliados')
-    print('7- Top compañias por servicios prestados')
-    print('8- Taxis según fecha determinada')
-    print('9- Taxis con más puntos')
-    print('10- Mejor horario')
+    print('-----------------------------------------------')
+    print('1- Inicializar Catálogo')
+    print('2- Cargar información de taxis')
+    print('3- Reporte general')
+    print('4- Taxis según fecha determinada')
+    print('5- Taxis con más puntos')
+    print('6- Mejor horario')
     print('0- Salir')
-    print('--------------------------------------------------')
+    print('-----------------------------------------------')
 
+def option_two():
+    selection = input("Seleccione un archivo a cargar:\na- Small\nb- Medium\nc- Large\nIngrese una letra: ")
+    if selection == "a":
+        file = small_file
+    elif selection == "b":
+        file = medium_file
+    elif selection == "c":
+        file = large_file
+    else:
+        print("Dato inválido")
+    controller.loadFile(cont, file)
+    controller.load_data(cont, file)
+    print('Altura del arbol: ' + str(controller.index_height(cont)))
+    print('Elementos en el arbol: ' + str(controller.index_size(cont)))
+    print('Mayor llave: ' + str(controller.maxKey(cont)))
+    print('Menor llave: ' + str(controller.minKey(cont)))
+    
+def option_three():
+    top_number_1 = int(input("Ingrese el rango para el top de compañías ordenadas por cantidad de taxis afiliados: "))
+    top_number_2 = int(input("Ingrese el rango para el top de compañías que más servicios prestaron: "))
+    taxis_total = controller.taxis_total(cont)
+    companies_total = controller.companies_total(cont)
+    top_companies_by_taxis = controller.top_companies_by_taxis(cont, top_number_1)
+    top_companies_by_services = controller.top_companies_by_services(cont, top_number_2)
+    print("\nNúmero total de taxis en los servicios reportados:",taxis_total)
+    print("Número total de compañías que tienen al menos un taxi inscrito:",companies_total)
+    print("----------------------------------------------")
+    print("Top",top_number_1,"de compañías por cantidad de taxis afiliados")
+    iterator_1 = it.newIterator(top_companies_by_taxis)
+    while it.hasNext(iterator_1):
+        company = it.next(iterator_1)
+        print(company[0],"| Taxis afiliados:",company[1])
+    print("----------------------------------------------")
+    print("Top",top_number_2,"de compañías por cantidad de servicios prestados")
+    iterator_2 = it.newIterator(top_companies_by_services)
+    while it.hasNext(iterator_2):
+        company = it.next(iterator_2)
+        print(company[0],"| Servicios prestados:",company[1])
+    print("----------------------------------------------")
+    
 def option_four():
     print('\nBuscando taxis con mejor puntaje en un rango de fechas')
     initialDate = input('Rango inicial (YYYY-MM-DD): ').strip()
@@ -88,34 +127,19 @@ def option_five():
 Menu principal
 """
 while True:
-    printMenu()
+    print_menu()
     inputs = input('Seleccione una opción para continuar \n')
-
     if int(inputs[0]) == 1:
         print('\nInicializando...')
         cont = controller.init_catalog()
     elif int(inputs[0]) == 2:
-        controller.load_data(cont, taxisfile)
-        print('Altura del arbol: ' + str(controller.index_height(cont)))
-        print('Elementos en el arbol: ' + str(controller.index_size(cont)))
-        print('Mayor llave: ' + str(controller.maxKey(cont)))
-        print('Menor llave: ' + str(controller.minKey(cont)))        
+        option_two()        
     elif int(inputs[0]) == 3:
-        None
+      option_three()
     elif int(inputs[0]) == 4:
-        option_four()
+      option_four()
     elif int(inputs[0]) == 5:
-        option_five()
-    elif int(inputs[0]) == 6:
-        None
-    elif int(inputs[0]) == 7:
-        None
-    elif int(inputs[0]) == 8:
-        None
-    elif int(inputs[0]) == 9:
-        None
-    elif int(inputs[0]) == 10:
-        None
+      option_five() 
     else:
         sys.exit(0)
 sys.exit(0)

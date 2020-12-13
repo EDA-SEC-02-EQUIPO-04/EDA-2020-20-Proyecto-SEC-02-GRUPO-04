@@ -1,4 +1,21 @@
-#ISIS1225 - Estructura de un proyecto
+# Proyecto 
+
+Realizado por el equipo 4 de la sección 2 del curso 
+Estructuras de Datos y Algoritmos de la Universidad de los Andes.
+
+## Integrantes del equipo
+
+- María Alejandra Vargas
+  - Correo: ma.vargas73@uniandes.edu.co
+  - Código: 201123148
+- Juan Alegría
+  - Correo: j.alegria@uniandes.edu.co
+  - Código: 202011282
+- Andrés Felipe Romero Brand
+  - Correo: af.romerob1@uniandes.edu.co
+  - Código: 202013448
+  
+ ## Estructura del proyecto 
 
 Este proyecto busca mostrar una posible forma de organizar el código que se va a desarrollar en los proyectos del curso.
 
