@@ -350,6 +350,9 @@ def compare_dates(date1, date2):
     if date1 == date2:
         return 0
     elif (date1 > date2):
+        return 1
+    else:
+        return -1
 
 def compare_taxis(id1, id2):
     if id1 == id2:
